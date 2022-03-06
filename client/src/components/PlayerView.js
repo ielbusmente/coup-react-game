@@ -4,7 +4,7 @@ import "../App.css";
 import duke from "../cards/duke.jpeg";
 import ass from "../cards/assassin.jpeg"
 import con from "../cards/contessa.jpeg"
-
+import Button from "./tryButton";
 const Playerview = (props) => {
   const {
     player,
@@ -139,6 +139,7 @@ const Playerview = (props) => {
     <div className="grid">
       <div className="box">
         <div>
+          <Button text ={'sadasdadadad'}/>
           Lives: {opp.life} <br />
           Cards: {opp.cards} <br />
           Coins: {opp.coins} <br />
@@ -162,6 +163,12 @@ const Playerview = (props) => {
       <div className="box">
         <div>
           CHALLENGE?
+          <Button text={`I have a Duke, you can't use Foreign Aid.`} 
+          btnfunction={() => {
+            action("cForeignAid");
+            return console.log(`counter foreign aid`);}}
+          buttonDes={`button-43`}
+          />
           <button
             onClick={() => {
               action("cForeignAid");
