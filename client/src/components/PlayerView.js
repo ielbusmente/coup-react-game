@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "../App.css";
 // import { useEffect, useState } from "react";
 import duke from "../cards/duke.jpeg";
@@ -14,35 +14,67 @@ const Playerview = (props) => {
     log,
     updateGameState,
     deck,
+    currentMove,
   } = props;
+  const [newLife, setnewLife] = useState(life);
   const move = player === sinoNa;
+  function removeLife(minusLife) {
+    setnewLife(life - minusLife);
+    if (newLife < 2) {
+      return "lose influence";
+    }
+    return "";
+  }
+  function checkInfluence(card) {
+    opp["cards"].some((c) => {
+      console.log(`card: ${c} === ${c.includes(card)}`);
+      return c.includes(card);
+    });
+  }
+
   function action(move) {
     const player1 = player === "Player 1";
     let newCoins;
     let currentMove;
-    let newLog;
+    let newLog = coins;
     switch (move) {
       case "income":
-        newCoins = coins + 1;
+        newCoins += 1;
         newLog = `${log}${player1 ? "P1" : "P2"}: Income\n`;
         break;
       case "foreignAid":
         currentMove = `foreignAid`;
         newLog = `${log}${player1 ? "P1" : "P2"}: Foreign Aid\n`;
-        newCoins = coins + 2;
+        break;
+      case "cForeignAid":
+        currentMove = `cForeignAid`;
+        newLog = `${log}${
+          player1 ? "P1" : "P2"
+        }: I have a duke, counter Foreign Aid\n`;
+        break;
+      case "cDuke":
+        newLog = `${log}${player1 ? "P1" : "P2"}: You don't have a duke\n`;
+        if (checkInfluence("duke")) {
+          removeLife(1);
+          currentMove = ``;
+          // swap duke
+        } else {
+          currentMove = `loseInfluence`;
+          newCoins += 2;
+        }
         break;
       case "duke":
         currentMove = `duke`;
         newLog = `${log}${player1 ? "P1" : "P2"}: I have a Duke\n`;
-        newCoins = coins + 3;
+        newCoins += 3;
         break;
       case "ass":
         currentMove = `ass`;
         newLog = `${log}${player1 ? "P1" : "P2"}: Assassinate\n`;
-        newCoins = coins - 3;
+        newCoins -= 3;
         break;
       case "coup":
-        newCoins = coins - 7;
+        newCoins -= 7;
         newLog = `${log}${player1 ? "P1" : "P2"}: Coup\n`;
         break;
       default:
@@ -96,30 +128,108 @@ const Playerview = (props) => {
   return (
     <div className="grid">
       <div className="box">
-        Lives: {opp.life} <br />
-        Cards: {opp.cards} <br />
-        Coins: {opp.coins} <br />
+        <div>
+          Lives: {opp.life} <br />
+          Cards: {opp.cards} <br />
+          Coins: {opp.coins} <br />
+        </div>
+        <div className="cards">
+          {cards.map((card) => (
+            <img
+              src={duke}
+              alt={``}
+              onClick={() => {
+                console.log(`card ${card}`);
+              }}
+            />
+          ))}
+        </div>
       </div>
       <div className="box">
         Turn: ({move ? "Your" : `${sinoNa}'s`} turn)
         {log && <textarea disabled value={log}></textarea>}
       </div>
       <div className="box">
-        <button onClick={() => action("income")} disabled={!move}>
-          Income
-        </button>
-        <button onClick={() => action("foreignAid")} disabled={!move}>
-          Foreign Aid
-        </button>
-        <button onClick={() => action("duke")} disabled={!move}>
-          I have a Duke
-        </button>
-        <button onClick={() => action("ass")} disabled={!move || coins < 3}>
-          Assassinate
-        </button>
-        <button onClick={() => action("coup")} disabled={!move || coins < 7}>
-          Coup
-        </button>
+        <div>
+          CHALLENGE?
+          <button
+            onClick={() => {
+              action("cForeignAid");
+              return console.log(`counter foreign aid`);
+            }}
+            disabled={currentMove !== "foreignAid" || !move}
+          >
+            I have a Duke, you can't use Foreign Aid.
+          </button>
+          <button
+            onClick={() => {
+              action("cDuke");
+              return console.log(`counter duke`);
+            }}
+            disabled={
+              !(
+                move &&
+                (currentMove === "cForeignAid" || currentMove === "duke")
+              )
+            }
+          >
+            You don't have a Duke.
+          </button>
+          <button
+            onClick={() => console.log("counter assassin")}
+            disabled={true}
+          >
+            You don't have an Assassin.
+          </button>
+          <button
+            onClick={() => console.log("counter assassin w contessa")}
+            disabled={true}
+          >
+            I have a Contessa, you can't assassinate an influence.
+          </button>
+          <button
+            onClick={() => console.log("counter contessa")}
+            disabled={true}
+          >
+            You don't have a Contessa.
+          </button>
+          <button onClick={() => console.log("no counter")} disabled={true}>
+            Pass.
+          </button>
+        </div>
+        <div>
+          MAKE A MOVE
+          <button
+            onClick={() => action("income")}
+            disabled={!(move && currentMove === "")}
+          >
+            Income
+          </button>
+          <button
+            onClick={() => action("foreignAid")}
+            disabled={!(move && currentMove === "")}
+          >
+            Foreign Aid
+          </button>
+          <button
+            onClick={() => action("duke")}
+            disabled={!(move && currentMove === "")}
+          >
+            I have a Duke
+          </button>
+          <button
+            onClick={() => action("ass")}
+            disabled={!(move && currentMove === "") || coins < 3}
+          >
+            Assassinate
+          </button>
+          <button
+            onClick={() => action("coup")}
+            disabled={!(move && currentMove === "") || coins < 7}
+          >
+            Coup
+          </button>
+        </div>
       </div>
       <div className="box">
         <div>
@@ -129,7 +239,13 @@ const Playerview = (props) => {
         </div>
         <div className="cards">
           {cards.map((card) => (
-            <img src={duke} alt={``} />
+            <img
+              src={duke}
+              alt={``}
+              onClick={() => {
+                console.log(`card ${card}`);
+              }}
+            />
           ))}
         </div>
       </div>

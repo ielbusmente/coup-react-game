@@ -53,7 +53,7 @@ const Gamestate = () => {
       //shut down connnection instance
       socket.off();
     };
-  }, []);
+  }, [room]);
 
   // init game state
   useEffect(() => {
@@ -109,8 +109,9 @@ const Gamestate = () => {
         p2Life,
         log,
         currentMove,
+        winner,
       }) => {
-        console.log("updateGame from server");
+        console.log("updateGame from server", currentMove);
         gameOver && setgameOver(gameOver);
         // gameOver===true && playGameOverSound()
         winner && setwinner(winner);
@@ -125,6 +126,7 @@ const Gamestate = () => {
           setp2({ coins: p2Coins, life: p2Life, cards: p2Cards });
         deck && setdeck(deck);
         log && setlog(log);
+        currentMove && setcurrentMove(currentMove);
       }
     );
 
@@ -135,7 +137,7 @@ const Gamestate = () => {
     socket.on("currentPlayerData", ({ name }) => {
       setcurrentPlayer(name);
     });
-  }, []);
+  }, [p1, p2]);
 
   // game over check
   // const checkGameOver = (arr) => {
