@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import "../App.css";
 // import { useEffect, useState } from "react";
 import duke from "../cards/duke.jpeg";
+import ass from "../cards/assassin.jpeg"
+import con from "../cards/contessa.jpeg"
 
 const Playerview = (props) => {
   const {
@@ -125,6 +127,14 @@ const Playerview = (props) => {
     console.log(`income: `, JSON.stringify(data));
     updateGameState(data);
   }
+  function getImage(influence) {
+    console.log(influence)
+    switch(influence.slice(0,-1)){
+      case 'duke': return duke;
+      case 'ass' :return ass;
+      case 'con' :return con;
+    }
+  }
   return (
     <div className="grid">
       <div className="box">
@@ -134,9 +144,9 @@ const Playerview = (props) => {
           Coins: {opp.coins} <br />
         </div>
         <div className="cards">
-          {cards.map((card) => (
+          {opp['cards'].map((card) => (
             <img
-              src={duke}
+              src={getImage(card)}
               alt={``}
               onClick={() => {
                 console.log(`card ${card}`);
@@ -240,7 +250,7 @@ const Playerview = (props) => {
         <div className="cards">
           {cards.map((card) => (
             <img
-              src={duke}
+              src={getImage(card)}
               alt={``}
               onClick={() => {
                 console.log(`card ${card}`);
