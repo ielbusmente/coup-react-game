@@ -10,5 +10,5 @@ open another terminal\
 go to client folder \
 ...\
 cd client\
-npm start\
+npm start
 
