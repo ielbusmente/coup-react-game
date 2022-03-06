@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>
+			How to convert Map keys to
+			array in JavaScript ?
+		</title>
+	</head>
+
+	<body style = "text-align:center;">
+		
+		<h1 style = "color:green;" >
+			GeeksForGeeks
+		</h1>
+		
+		<p id = "GFG_UP" style =
+			"font-size: 19px; font-weight: bold;">
+		</p>
+		
+		<button onClick = "GFG_Fun()">
+			click here
+		</button>
+		
+		<p id = "GFG_DOWN" style =
+			"color: green; font-size: 24px; font-weight: bold;">
+		</p>
+		
+		<script>
+			var up = document.getElementById('GFG_UP');
+			var down = document.getElementById('GFG_DOWN');
+			
+			let myMap = new Map().set('GFG', 1).set('Geeks', 2);
+			
+			up.innerHTML = 'myMap = ("GFG" => 1, "Geeks" => 2)';
+			
+			function GFG_Fun() {
+				var array = Array.from(myMap.keys());
+				down.innerHTML = "Elements in array are " + array
+						+ " and Length of array = " + array.length;
+			}
+		</script>
+	</body>
+</html>					
