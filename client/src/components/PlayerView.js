@@ -15,9 +15,40 @@ const Playerview = (props) => {
     updateGameState,
     deck,
   } = props;
-  function income() {
-    let newCoins = coins + 1;
+  const move = player === sinoNa;
+  function action(move) {
     const player1 = player === "Player 1";
+    let newCoins;
+    let currentMove;
+    let newLog;
+    switch (move) {
+      case "income":
+        newCoins = coins + 1;
+        newLog = `${log}${player1 ? "P1" : "P2"}: Income\n`;
+        break;
+      case "foreignAid":
+        currentMove = `foreignAid`;
+        newLog = `${log}${player1 ? "P1" : "P2"}: Foreign Aid\n`;
+        newCoins = coins + 2;
+        break;
+      case "duke":
+        currentMove = `duke`;
+        newLog = `${log}${player1 ? "P1" : "P2"}: I have a Duke\n`;
+        newCoins = coins + 3;
+        break;
+      case "ass":
+        currentMove = `ass`;
+        newLog = `${log}${player1 ? "P1" : "P2"}: Assassinate\n`;
+        newCoins = coins - 3;
+        break;
+      case "coup":
+        newCoins = coins - 7;
+        newLog = `${log}${player1 ? "P1" : "P2"}: Coup\n`;
+        break;
+      default:
+        console.error("Invalid Move");
+    }
+
     let p1Cards;
     let p1Coins;
     let p1Life;
@@ -25,7 +56,7 @@ const Playerview = (props) => {
     let p2Coins;
     let p2Life;
     let turn;
-    let newLog = `${log}${player1 ? "P1" : "P2"}: Income\n`;
+
     if (player1) {
       p1Cards = cards;
       p1Coins = newCoins;
@@ -56,6 +87,7 @@ const Playerview = (props) => {
       p2Coins: p2Coins,
       p2Life: p2Life,
       log: newLog,
+      currentMove: currentMove,
     };
     console.log(`test`);
     console.log(`income: `, JSON.stringify(data));
@@ -69,14 +101,25 @@ const Playerview = (props) => {
         Coins: {opp.coins} <br />
       </div>
       <div className="box">
-        Turn: 1 ({player === sinoNa ? "Your" : `${sinoNa}'s`} turn)
+        Turn: ({move ? "Your" : `${sinoNa}'s`} turn)
         {log && <textarea disabled value={log}></textarea>}
       </div>
       <div className="box">
-        <button onClick={income}>Move 1</button>
-        <button>Move 2</button>
-        <button>Move 3</button>
-        <button>Move 4</button>
+        <button onClick={() => action("income")} disabled={!move}>
+          Income
+        </button>
+        <button onClick={() => action("foreignAid")} disabled={!move}>
+          Foreign Aid
+        </button>
+        <button onClick={() => action("duke")} disabled={!move}>
+          I have a Duke
+        </button>
+        <button onClick={() => action("ass")} disabled={!move || coins < 3}>
+          Assassinate
+        </button>
+        <button onClick={() => action("coup")} disabled={!move || coins < 7}>
+          Coup
+        </button>
       </div>
       <div className="box">
         <div>
@@ -85,8 +128,9 @@ const Playerview = (props) => {
           Coins: {coins} <br />
         </div>
         <div className="cards">
-          <img src={duke} alt={``} />
-          <img src={duke} alt={``} />
+          {cards.map((card) => (
+            <img src={duke} alt={``} />
+          ))}
         </div>
       </div>
     </div>

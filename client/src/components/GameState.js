@@ -30,6 +30,7 @@ const Gamestate = () => {
   const [p2, setp2] = useState(playerDefaultStats);
   const [deck, setdeck] = useState([]);
   const [log, setlog] = useState([]);
+  const [currentMove, setcurrentMove] = useState(``);
 
   // connection
   useEffect(() => {
@@ -90,6 +91,7 @@ const Gamestate = () => {
         setp2({ ...p2, cards: p2Cards });
         setdeck(deck);
         setlog(log);
+        setcurrentMove(``);
       }
     );
 
@@ -106,6 +108,7 @@ const Gamestate = () => {
         p2Coins,
         p2Life,
         log,
+        currentMove,
       }) => {
         console.log("updateGame from server");
         gameOver && setgameOver(gameOver);
@@ -135,13 +138,13 @@ const Gamestate = () => {
   }, []);
 
   // game over check
-  const checkGameOver = (arr) => {
-    return arr.length === 1;
-  };
+  // const checkGameOver = (arr) => {
+  //   return arr.length === 1;
+  // };
 
-  const checkWinner = (arr, player) => {
-    return arr.length === 1 ? player : "";
-  };
+  // const checkWinner = (arr, player) => {
+  //   return arr.length === 1 ? player : "";
+  // };
   // useEffect(() => {
   //   console.log(JSON.stringify(players));
   // }, [players]);
@@ -175,7 +178,7 @@ const Gamestate = () => {
             <Pending code={room} currentPlayer={currentPlayer} />
           )}
 
-          {log && players.length === 2 && (
+          {players.length === 2 && (
             <>
               {gameOver ? (
                 <div>
@@ -205,6 +208,8 @@ const Gamestate = () => {
                     opp={currentPlayer === "Player 1" ? p2 : p1}
                     log={log}
                     updateGameState={updateGameState}
+                    deck={deck}
+                    currentMove={currentMove}
                   />
                 </>
               )}
