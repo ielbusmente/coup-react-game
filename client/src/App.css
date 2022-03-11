@@ -43,6 +43,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  transition: 0.3s;
 }
 
 .grid {
@@ -97,4 +98,13 @@
 
 .grid .box div.cards {
   flex-direction: row;
+}
+
+.hover-en:hover {
+  transform: scale(1.5);
+  cursor: pointer;
+}
+
+.card-dead {
+  opacity: 50%;
 }

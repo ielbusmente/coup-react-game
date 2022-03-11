@@ -28,6 +28,8 @@ const Gamestate = () => {
 
   const [p1, setp1] = useState(playerDefaultStats);
   const [p2, setp2] = useState(playerDefaultStats);
+  const [p1XCards, setp1XCards] = useState([]);
+  const [p2XCards, setp2XCards] = useState([]);
   const [deck, setdeck] = useState([]);
   const [log, setlog] = useState([]);
   const [currentMove, setcurrentMove] = useState(``);
@@ -110,6 +112,8 @@ const Gamestate = () => {
         log,
         currentMove,
         winner,
+        p1XCards,
+        p2XCards,
       }) => {
         console.log("updateGame from server", currentMove);
         gameOver && setgameOver(gameOver);
@@ -117,16 +121,18 @@ const Gamestate = () => {
         winner && setwinner(winner);
         turn && setturn(turn);
         p1Cards &&
-          p1Coins &&
+          p1Coins !== null &&
           p1Life &&
           setp1({ coins: p1Coins, life: p1Life, cards: p1Cards });
         p2Cards &&
-          p2Coins &&
+          p2Coins !== null &&
           p2Life &&
           setp2({ coins: p2Coins, life: p2Life, cards: p2Cards });
         deck && setdeck(deck);
         log && setlog(log);
-        currentMove && setcurrentMove(currentMove);
+        p1XCards && setp1XCards(p1XCards);
+        p2XCards && setp2XCards(p2XCards);
+        setcurrentMove(currentMove);
       }
     );
 
@@ -137,7 +143,7 @@ const Gamestate = () => {
     socket.on("currentPlayerData", ({ name }) => {
       setcurrentPlayer(name);
     });
-  }, [p1, p2]);
+  }, []);
 
   // game over check
   // const checkGameOver = (arr) => {
@@ -212,6 +218,8 @@ const Gamestate = () => {
                     updateGameState={updateGameState}
                     deck={deck}
                     currentMove={currentMove}
+                    p1XCardsG={p1XCards}
+                    p2XCardsG={p2XCards}
                   />
                 </>
               )}
