@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import "../App.css";
 // import { useEffect, useState } from "react";
 import duke from "../cards/duke.jpeg";
-import shuffle from "../utils/shuffleDeck";
 import ass from "../cards/assassin.jpeg";
 import con from "../cards/contessa.jpeg";
+import back from "../cards/backcards.png";
 import Button from "./tryButton";
 
 const Playerview = (props) => {
@@ -259,27 +259,20 @@ const Playerview = (props) => {
     <div className="grid">
       <div className="box">
         <div>
-          <Button text={"sadasdadadad"} />
           Lives: {opp.life} <br />
           Cards: {opp.cards} <br />
           Coins: {opp.coins} <br />
         </div>
         <div className="cards">
-          {opp.cards.map((card) => {
-            const deadCard = player1
-              ? p2XCardsG.includes(card)
-              : p1XCardsG.includes(card);
-            return (
-              <img
-                src={getImage(card)}
-                className={`  ${deadCard ? `card-dead` : ``}`}
-                alt={``}
-                onClick={() => {
-                  console.log(`card ${card}`);
-                }}
-              />
-            );
-          })}
+          {opp["cards"].map((card) => (
+            <img
+              src={back}
+              alt={``}
+              onClick={() => {
+                console.log(`card ${card}`);
+              }}
+            />
+          ))}
         </div>
       </div>
       <div className="box">
@@ -298,7 +291,7 @@ const Playerview = (props) => {
             buttonDes={`button-43`}
             disabled={currentMove !== "foreignAid" || !move}
           />
-          <button
+          {/* <button
             onClick={() => {
               action("cForeignAid");
               return console.log(`counter foreign aid`);
@@ -306,8 +299,22 @@ const Playerview = (props) => {
             disabled={currentMove !== "foreignAid" || !move}
           >
             I have a Duke, you can't use Foreign Aid.
-          </button>
-          <button
+          </button> */}
+          <Button
+            text={`You don't have a Duke.`}
+            btnfunction={() => {
+              action("cDuke");
+              return console.log(`counter duke`);
+            }}
+            disable={
+              !(
+                move &&
+                (currentMove === "cForeignAid" || currentMove === "duke")
+              )
+            }
+            buttonDes={`button-44`}
+          />
+          {/* <button
             onClick={() => {
               action("cDuke");
               return console.log(`counter duke`);
@@ -320,73 +327,67 @@ const Playerview = (props) => {
             }
           >
             You don't have a Duke.
-          </button>
-          <button
+          </button> */}
+          <Button
+            text={`You don't have an Assassin.`}
+            btnfunction={() => console.log("counter assassin")}
+            disable={true}
+            buttonDes={`button-43`}
+          />
+          {/* <button
             onClick={() => console.log("counter assassin")}
             disabled={true}
           >
             You don't have an Assassin.
-          </button>
-          <button
+          </button> */}
+          <Button
+            text={`I have a Contessa, you can't assassinate an influence.`}
+            btnfunction={() => console.log("counter assassin w contessa")}
+            disabled={true}
+            buttonDes={`button-44`}
+          />
+          {/* <button
             onClick={() => console.log("counter assassin w contessa")}
             disabled={true}
           >
             I have a Contessa, you can't assassinate an influence.
-          </button>
-          <button
+          </button> */}
+          <Button
+            text={`You don't have a Contessa.`}
+            btnfunction={() => console.log("counter contessa")}
+            disable={true}
+            buttonDes={`button-43`}
+          />
+          {/* <button
             onClick={() => console.log("counter contessa")}
             disabled={true}
           >
             You don't have a Contessa.
-          </button>
-          <button
-            onClick={() => {
-              action("pass");
-              console.log("no counter");
-            }}
-            disabled={
-              !(
-                move &&
-                (currentMove === "foreignAid" ||
-                  currentMove === "duke" ||
-                  currentMove === "cForeignAid")
-              )
-            }
-          >
+          </button> */}
+          <Button
+            text={`Pass.`}
+            btnfunction={() => console.log("no counter")}
+            disable={true}
+            buttonDes={`button-44`}
+          />
+          {/* <button onClick={() => console.log("no counter")} disabled={true}>
             Pass.
-          </button>
+          </button> */}
         </div>
         <div>
           MAKE A MOVE
-          <button
-            onClick={() => {
-              console.log("move", move);
-              console.log("currentMove", currentMove);
-              console.log("player", player);
-              console.log("sinoNa", sinoNa);
-              console.log("life", life);
-              console.log("coins", coins);
-              console.log("cards", cards);
-              console.log("opp.cards", opp.cards);
-              console.log("opp.coins", opp.coins);
-              console.log("opp.life", opp.life);
-              console.log("p1XCardsG", p1XCardsG);
-              console.log("p2XCardsG", p2XCardsG);
-              // console.log("currentMove", currentMove);
-              // console.log("currentMove", currentMove);
-              // console.log("currentMove", currentMove);
-              // console.log("currentMove", currentMove);
-              // console.log("currentMove", currentMove);
-            }}
-          >
-            asdf
-          </button>
-          <button
+          <Button
+            text={`Income`}
+            btnfunction={() => action("income")}
+            disable={!(move && currentMove === "")}
+            buttonDes={`button-43`}
+          />
+          {/* <button
             onClick={() => action("income")}
             disabled={!(move && currentMove === "")}
           >
             Income
-          </button>
+          </button> */}
           <button
             onClick={() => action("foreignAid")}
             disabled={!(move && currentMove === "")}
