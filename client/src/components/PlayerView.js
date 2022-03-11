@@ -3,6 +3,9 @@ import "../App.css";
 // import { useEffect, useState } from "react";
 import duke from "../cards/duke.jpeg";
 import shuffle from "../utils/shuffleDeck";
+import ass from "../cards/assassin.jpeg";
+import con from "../cards/contessa.jpeg";
+import Button from "./tryButton";
 
 const Playerview = (props) => {
   const {
@@ -241,10 +244,22 @@ const Playerview = (props) => {
     console.log(`${move}: `, JSON.stringify(data));
     updateGameState(data);
   }
+  function getImage(influence) {
+    console.log(influence);
+    switch (influence.slice(0, -1)) {
+      case "duke":
+        return duke;
+      case "ass":
+        return ass;
+      case "con":
+        return con;
+    }
+  }
   return (
     <div className="grid">
       <div className="box">
         <div>
+          <Button text={"sadasdadadad"} />
           Lives: {opp.life} <br />
           Cards: {opp.cards} <br />
           Coins: {opp.coins} <br />
@@ -256,7 +271,7 @@ const Playerview = (props) => {
               : p1XCardsG.includes(card);
             return (
               <img
-                src={duke}
+                src={getImage(card)}
                 className={`  ${deadCard ? `card-dead` : ``}`}
                 alt={``}
                 onClick={() => {
@@ -274,6 +289,14 @@ const Playerview = (props) => {
       <div className="box">
         <div>
           CHALLENGE?
+          <Button
+            text={`I have a Duke, you can't use Foreign Aid.`}
+            btnfunction={() => {
+              action("cForeignAid");
+              return console.log(`counter foreign aid`);
+            }}
+            buttonDes={`button-43`}
+          />
           <button
             onClick={() => {
               action("cForeignAid");
@@ -402,7 +425,7 @@ const Playerview = (props) => {
               : p2XCardsG.includes(card);
             return (
               <img
-                src={duke}
+                src={getImage(card)}
                 alt={``}
                 className={`${
                   (currentMove === "loseInfluence1" ||
