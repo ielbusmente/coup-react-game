@@ -43,6 +43,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  transition: 0.3s;
 }
 
 .grid {
@@ -99,14 +100,21 @@
   flex-direction: row;
 }
 
+.hover-en:hover {
+  transform: scale(1.5);
+  cursor: pointer;
+}
 
+.card-dead {
+  opacity: 50%;
+}
 
 /* CSS */
 .button-43 {
-  background-image: linear-gradient(-180deg, #37AEE2 0%, #1E96C8 100%);
-  border-radius: .5rem;
+  background-image: linear-gradient(-180deg, #37aee2 0%, #1e96c8 100%);
+  border-radius: 0.5rem;
   box-sizing: border-box;
-  color: #FFFFFF;
+  color: #ffffff;
   display: flex;
   font-size: 16px;
   justify-content: center;
@@ -121,7 +129,7 @@
 }
 
 .button-43:hover {
-  background-image: linear-gradient(-180deg, #1D95C9 0%, #17759C 100%);
+  background-image: linear-gradient(-180deg, #1d95c9 0%, #17759c 100%);
 }
 
 @media (min-width: 768px) {

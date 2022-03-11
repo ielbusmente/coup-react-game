@@ -1,0 +1,16 @@
+class test {
+    public static void main(String args[] ) {
+        start date = date 
+        // end date = date 
+        // date range = 7
+        array of date strings = []
+        for (int i = 0; i<7; i++) {
+            dateStrings[i] = (start date.tostring) // mm/dd/yyyy
+            start date + 1 day
+        }
+        array of loaded data
+        for (base sa date strings) {
+            array of loaded data push (load )
+        }
+    }
+}
