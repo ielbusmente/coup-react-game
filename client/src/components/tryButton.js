@@ -6,11 +6,13 @@ const tryButton = (props) => {
     const{
     text,
     btnfunction,
-    buttonDes
+    buttonDes,
+    disable
     } = props;
   return (
     <button className={buttonDes}
             onClick={ btnfunction}
+            disabled= {disable}
           >
             {text}
     </button>
