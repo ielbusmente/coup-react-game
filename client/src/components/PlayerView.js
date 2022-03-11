@@ -245,7 +245,7 @@ const Playerview = (props) => {
     updateGameState(data);
   }
   function getImage(influence) {
-    console.log(influence);
+    // console.log(influence);
     switch (influence.slice(0, -1)) {
       case "duke":
         return duke;
@@ -296,6 +296,7 @@ const Playerview = (props) => {
               return console.log(`counter foreign aid`);
             }}
             buttonDes={`button-43`}
+            disabled={currentMove !== "foreignAid" || !move}
           />
           <button
             onClick={() => {
