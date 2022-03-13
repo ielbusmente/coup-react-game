@@ -12,12 +12,12 @@ const Lobby = () => {
         onChange={(e) => setcode(e.target.value)}
       />
       <Link to={`/play/${code}`}>
-        <button className="game-button green">Join</button>
+        <button className="">Join</button>
       </Link>
 
       <div className="homepage-create">
         <Link to={`/play/${codeGen(5)}`}>
-          <button className="game-button orange">Create Room</button>
+          <button className="">Create Room</button>
         </Link>
       </div>
     </div>

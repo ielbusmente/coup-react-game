@@ -228,11 +228,16 @@ const Gamestate = () => {
           )}
         </>
       ) : (
-        <h1>Room full</h1>
+        <>
+          <h1>Room full</h1>
+          <Link to={`/`}>
+            <button className="">QUIT</button>
+          </Link>
+        </>
       )}
-      <Link to="/">
+      {/* <Link to="/">
         <button className="game-button red">QUIT</button>
-      </Link>
+      </Link> */}
     </div>
   );
   // return <div>adf</div>;

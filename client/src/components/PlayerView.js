@@ -12,6 +12,7 @@ import Button from "./tryButton";
 // utils
 import shuffle from "../utils/shuffleDeck";
 import formatCard from "../utils/formatCard";
+import { Link } from "react-router-dom";
 
 const Playerview = (props) => {
   const {
@@ -54,9 +55,9 @@ const Playerview = (props) => {
   }, [currentMove]);
 
   // test functions
-  function endGame() {
-    updateGameState({ gameOver: true, winner: "asdf" });
-  }
+  // function endGame() {
+  //   updateGameState({ gameOver: true, winner: "asdf" });
+  // }
 
   /**removes (minusLife) life from (kanino)
    * -minusLife wants number
@@ -246,7 +247,10 @@ const Playerview = (props) => {
         break;
       case "coup":
         newCoins -= 7;
-        newLog = `Coup\n`;
+        newLog += `${terP}Coup\n`;
+        const lifeRes = removeLife(1, "");
+        newOppLife = lifeRes.life;
+        newCurrentMove = lifeRes.str;
         break;
       // Counter/Response
       case "pass":
@@ -268,7 +272,8 @@ const Playerview = (props) => {
           const lifeRes = removeLife(1, "current");
           newLife = lifeRes.life;
           newCurrentMove = lifeRes.str;
-          revTurn = true;
+          // revTurn = true;
+          if (newCurrentMove.includes("loseInfluence1")) revTurn = true;
         }
         break;
       case "cForeignAid":
@@ -346,6 +351,7 @@ const Playerview = (props) => {
           newLife = lifeRes.life;
           newCurrentMove = `${lifeRes.str}swap${influenceCon.card}`;
           setswapCardStyle(influenceCon.card);
+          if (newCurrentMove.includes("loseInfluence1")) revTurn = true;
         } else {
           newLog += `${terPR}has no Contessa\n`;
           const lifeRes = removeLife(2, "");
@@ -454,7 +460,8 @@ const Playerview = (props) => {
       <div className="box">
         <div>
           CHALLENGE?
-          <button onClick={endGame}>End Game</button>
+          {/* test  */}
+          {/* <button onClick={endGame}>End Game</button> */}
           <Button
             text={`I have a Duke, you can't use Foreign Aid.`}
             btnfunction={() => {
@@ -531,7 +538,7 @@ const Playerview = (props) => {
         <div>
           MAKE A MOVE
           {/* test  */}
-          <button
+          {/* <button
             onClick={() => {
               console.log("move", move);
               console.log("currentMove", currentMove);
@@ -551,7 +558,7 @@ const Playerview = (props) => {
             }}
           >
             show state
-          </button>
+          </button> */}
           <Button
             text={`Income`}
             btnfunction={() => action("income")}
@@ -564,24 +571,24 @@ const Playerview = (props) => {
             disabled={!(move && currentMove === "")}
             buttonDes={`button-44`}
           />
-          <button
-            onClick={() => action("duke")}
+          <Button
+            text={`I have a Duke`}
+            btnfunction={() => action("duke")}
             disabled={!(move && currentMove === "")}
-          >
-            I have a Duke
-          </button>
-          <button
-            onClick={() => action("ass")}
+            buttonDes={`button-43`}
+          />
+          <Button
+            text={`Assassinate`}
+            btnfunction={() => action("ass")}
             disabled={!(move && currentMove === "") || coins < 3}
-          >
-            Assassinate
-          </button>
-          <button
-            onClick={() => action("coup")}
+            buttonDes={`button-44`}
+          />
+          <Button
+            text={`Coup`}
+            btnfunction={() => action("coup")}
             disabled={!(move && currentMove === "") || coins < 7}
-          >
-            Coup
-          </button>
+            buttonDes={`button-43`}
+          />
           <Button
             text={`Swap`}
             btnfunction={() => {
@@ -671,6 +678,9 @@ const Playerview = (props) => {
             );
           })}
         </div>
+        <Link to={`/`}>
+          <button className="">QUIT</button>
+        </Link>
       </div>
     </div>
   );

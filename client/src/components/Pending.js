@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Pending = ({ code, currentPlayer }) => {
   return (
@@ -10,6 +11,9 @@ const Pending = ({ code, currentPlayer }) => {
       {currentPlayer === "Player 1" && (
         <h1 className="">Waiting for Player 2 to join the game.</h1>
       )}
+      <Link to={`/`}>
+        <button className="">QUIT</button>
+      </Link>
     </div>
   );
 };
