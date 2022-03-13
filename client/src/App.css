@@ -96,12 +96,27 @@
   flex-direction: column;
 }
 
+/* cards  */
 .grid .box div.cards {
   flex-direction: row;
 }
+.card-container {
+  background-color: #e62143;
+  animation: scaleAnim 2s ease infinite;
+}
+.card-container:hover {
+  transform: scale(1.5);
+
+  animation: none;
+}
+.hover-en {
+  animation: gameOverAnim 2s ease infinite;
+  /* opacity: 50%; */
+}
 
 .hover-en:hover {
-  transform: scale(1.5);
+  /* transform: scale(1); */
+  opacity: 50%;
   cursor: pointer;
 }
 
@@ -109,14 +124,13 @@
   opacity: 50%;
 }
 
-/* CSS */
+/* buttons  */
 .button-43 {
   background-image: linear-gradient(-180deg, #37aee2 0%, #1e96c8 100%);
   border-radius: 0.5rem;
-  box-sizing: border-box;
   color: #ffffff;
   display: flex;
-  font-size: 16px;
+
   justify-content: center;
   padding: 1rem 1.75rem;
   text-decoration: none;
@@ -125,7 +139,8 @@
   cursor: pointer;
   user-select: none;
   -webkit-user-select: none;
-  touch-action: manipulation;
+  transition: 0.9s !important;
+  /* touch-action: manipulation; */
 }
 
 .button-43:hover {
@@ -142,8 +157,6 @@
   }
 }
 
-
-/* CSS */
 .button-44 {
   background: #e62143;
   border-radius: 11px;
@@ -151,18 +164,14 @@
   color: #fff;
   cursor: pointer;
   display: flex;
-  font-family: Mija,-apple-system,BlinkMacSystemFont,Roboto,"Roboto Slab","Droid Serif","Segoe UI",system-ui,Arial,sans-serif;
-  font-size: 1.15em;
-  font-weight: 700;
   justify-content: center;
   line-height: 33.4929px;
-  padding: .8em 1em;
+  padding: 0.8em 1em;
   text-align: center;
   text-decoration: none;
   text-decoration-skip-ink: auto;
-  text-shadow: rgba(0, 0, 0, .3) 1px 1px 1px;
-  text-underline-offset: 1px;
-  transition: all .2s ease-in-out;
+  text-shadow: rgba(0, 0, 0, 0.3) 1px 1px 1px;
+  transition: all 0.2s ease-in-out;
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
@@ -171,15 +180,178 @@
   border: 0;
 }
 
-.button-44:active,
+/* .button-44:active,
 .button-44:focus {
   border-bottom-style: none;
   border-color: #dadada;
-  box-shadow: rgba(0, 0, 0, .3) 0 3px 3px inset;
+  box-shadow: rgba(0, 0, 0, 0.3) 0 3px 3px inset;
   outline: 0;
-}
+} */
 
 .button-44:hover {
   border-bottom-style: none;
   border-color: #dadada;
+}
+
+.button-44.disabled {
+  background-image: linear-gradient(-180deg, #000000 0%, #570000 100%);
+  cursor: not-allowed;
+}
+/* 
+.flip {
+  animation-name: flipAnim;
+  animation-duration: 0.3s; 
+}
+
+@keyframes flipAnim {
+  from {
+    transform: rotateY(0);
+  }
+  to {
+    transform: rotateY(-180deg);
+  }
+} */
+
+.flip-card {
+  background-color: transparent;
+  width: 300px;
+  height: 300px;
+  perspective: 1000px;
+}
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.2s !important;
+  transform-style: preserve-3d;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.flip-card.flip .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front,
+.flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.flip-card-back {
+  background-color: #bbb;
+  color: black;
+}
+
+.flip-card-front {
+  background-color: #2980b9;
+  color: white;
+  transform: rotateY(180deg);
+}
+
+.box textarea {
+  width: 100%;
+  height: 100%;
+}
+
+/* game over  */
+.game-over {
+  z-index: 2;
+  background-image: url("./cards/bg.jpeg");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: #333;
+  height: 100vh;
+  width: 100%;
+  position: absolute;
+  opacity: 90%;
+  animation: gameOverAnim 10s ease-in-out infinite;
+  transition: 0.6s;
+}
+
+@keyframes gameOverAnim {
+  0% {
+    opacity: 90%;
+  }
+  25% {
+    opacity: 83%;
+  }
+  50% {
+    opacity: 83%;
+  }
+  75% {
+    opacity: 69%;
+  }
+  100% {
+    opacity: 90%;
+  }
+}
+.game-over-container {
+  z-index: 4;
+  display: flex;
+  color: #ff3b5c;
+  /* color: #fff; */
+  height: 100vh;
+  position: absolute;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.game-over-container > h1,
+.game-over-container > h2 {
+  z-index: 4;
+  font-weight: bold;
+  font-size: 3rem;
+  animation: gameOverTextAnim 5s infinite;
+}
+
+@keyframes gameOverTextAnim {
+  0% {
+    transform: skewX(6deg);
+  }
+  23% {
+    transform: skewX(0);
+  }
+  34% {
+    transform: skewX(22deg);
+  }
+  35% {
+    transform: skewX(-20deg);
+  }
+  36% {
+    transform: skewY(1deg);
+  }
+  37% {
+    transform: skewX(-223deg);
+  }
+  68% {
+    transform: skewX(-1deg);
+  }
+  69% {
+    transform: skewX(193deg);
+  }
+  85% {
+    transform: skewX(0);
+  }
+  90% {
+    transform: skewY(1);
+  }
+  97% {
+    transform: skewY(-2deg);
+  }
+  100% {
+    transform: skewX(0);
+  }
+}
+
+@keyframes scaleAnim {
+  50% {
+    transform: scale(1.1);
+  }
 }

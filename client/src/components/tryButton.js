@@ -8,6 +8,7 @@ const tryButton = (props) => {
     <button
       className={`${buttonDes} ${disabled ? `disabled` : ``}`}
       onClick={btnfunction}
+      disabled={disabled}
     >
       {text}
     </button>

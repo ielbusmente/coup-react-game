@@ -188,41 +188,42 @@ const Gamestate = () => {
 
           {players.length === 2 && (
             <>
-              {gameOver ? (
+              {/* {!gameOver && (
                 <div>
                   {winner !== "" && (
-                    <>
+                    <div className="game-over">
                       <h1>GAME OVER</h1>
                       <h2>{winner} wins!</h2>
-                    </>
+                    </div>
                   )}
                 </div>
-              ) : (
-                <>
-                  {/* {players.length} <br />
-                  {currentPlayer} */}
-                  <Playerview
-                    player={currentPlayer}
-                    sinoNa={turn}
-                    coins={
-                      currentPlayer === "Player 1" ? p1["coins"] : p2["coins"]
-                    }
-                    cards={
-                      currentPlayer === "Player 1" ? p1["cards"] : p2["cards"]
-                    }
-                    life={
-                      currentPlayer === "Player 1" ? p1["life"] : p2["life"]
-                    }
-                    opp={currentPlayer === "Player 1" ? p2 : p1}
-                    log={log}
-                    updateGameState={updateGameState}
-                    deck={deck}
-                    currentMove={currentMove}
-                    p1XCardsG={p1XCards}
-                    p2XCardsG={p2XCards}
-                  />
-                </>
+              )} */}
+              {gameOver && (
+                <div>
+                  {winner !== "" && (
+                    <div className="game-over-container">
+                      <div className="game-over"></div>
+                      <h1>GAME OVER</h1>
+                      <h2>{winner} wins!</h2>
+                    </div>
+                  )}
+                </div>
               )}
+
+              <Playerview
+                player={currentPlayer}
+                sinoNa={turn}
+                coins={currentPlayer === "Player 1" ? p1["coins"] : p2["coins"]}
+                cards={currentPlayer === "Player 1" ? p1["cards"] : p2["cards"]}
+                life={currentPlayer === "Player 1" ? p1["life"] : p2["life"]}
+                opp={currentPlayer === "Player 1" ? p2 : p1}
+                log={log}
+                updateGameState={updateGameState}
+                deck={deck}
+                currentMove={currentMove}
+                p1XCardsG={p1XCards}
+                p2XCardsG={p2XCards}
+              />
             </>
           )}
         </>
