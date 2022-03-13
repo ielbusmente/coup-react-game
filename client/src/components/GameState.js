@@ -122,11 +122,11 @@ const Gamestate = () => {
         turn && setturn(turn);
         p1Cards &&
           p1Coins !== null &&
-          p1Life &&
+          p1Life !== null &&
           setp1({ coins: p1Coins, life: p1Life, cards: p1Cards });
         p2Cards &&
           p2Coins !== null &&
-          p2Life &&
+          p2Life !== null &&
           setp2({ coins: p2Coins, life: p2Life, cards: p2Cards });
         deck && setdeck(deck);
         log && setlog(log);

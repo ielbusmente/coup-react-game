@@ -309,6 +309,7 @@
   font-weight: bold;
   font-size: 3rem;
   animation: gameOverTextAnim 5s infinite;
+  user-select: none;
 }
 
 @keyframes gameOverTextAnim {

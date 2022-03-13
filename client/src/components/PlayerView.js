@@ -28,7 +28,15 @@ const Playerview = (props) => {
     p1XCardsG, //p1 lost Cards
     p2XCardsG, //p2 lost Cards
   } = props;
-
+  // check game over
+  useEffect(() => {
+    if (life < 1) {
+      updateGameState({
+        gameOver: true,
+        winner: player1 ? "Player 2" : "Player 1",
+      });
+    }
+  }, [life]);
   //to flip reveal the card
   const [swapCardStyle, setswapCardStyle] = useState("");
   /**kung sino na */
@@ -73,11 +81,19 @@ const Playerview = (props) => {
   }
   /**check a specific influence card of opponent*/
   function checkInfluence(card) {
+    // const effectiveCards = opp["cards"];
+    // (player1 ? p2XCardsG : p1XCardsG).map((xCard) =>
+    //   effectiveCards.slice(effectiveCards.indexOf(xCard.slice(0, -1)))
+    // );
+    // console.log(effectiveCards);
+
     let cardRet;
     const exists = opp["cards"].some((c) => {
       // console.log(`card: ${c} === ${c.includes(card)}`);
-      cardRet = c.includes(card) ? c : "";
-      return c.includes(card);
+      const returnTheCard =
+        c.includes(card) && !(player1 ? p2XCardsG : p1XCardsG).includes(c);
+      cardRet = returnTheCard ? c : "";
+      return returnTheCard;
     });
     // console.log(cardRet);
     return { exists, card: cardRet };
@@ -148,50 +164,50 @@ const Playerview = (props) => {
     let newLog = `${log}${player1 ? "P1" : "P2"}: Lost an Influence.\n`;
     // console.log(newXCards);
     // console.log(newXCards.length);
-    if (newXCards.length === 2) {
-      newLog += `Game Over: ${terP} won. Last card is ${formatCard(card)}`;
-      updateGameState({ gameOver: true, winner: terPR });
+    // if (newXCards.length === 2) {
+    //   newLog += `Game Over: ${terP} won. Last card is ${formatCard(card)}`;
+    //   updateGameState({ gameOver: true, winner: terPR });
+    // } else {
+    let p1Cards,
+      p1Coins,
+      p1Life,
+      p2Cards,
+      p2Coins,
+      p2Life,
+      turn,
+      p1XCards,
+      p2XCards;
+
+    if (player1) {
+      p1Cards = newCards;
+      p1Coins = coins;
+      p1Life = life;
+      turn = rev ? "Player 2" : "Player 1";
+      p1XCards = newXCards;
     } else {
-      let p1Cards,
-        p1Coins,
-        p1Life,
-        p2Cards,
-        p2Coins,
-        p2Life,
-        turn,
-        p1XCards,
-        p2XCards;
-
-      if (player1) {
-        p1Cards = newCards;
-        p1Coins = coins;
-        p1Life = life;
-        turn = rev ? "Player 2" : "Player 1";
-        p1XCards = newXCards;
-      } else {
-        p2Cards = newCards;
-        p2Coins = coins;
-        p2Life = life;
-        turn = rev ? "Player 1" : "Player 2";
-        p2XCards = newXCards;
-      }
-
-      const data = {
-        turn,
-        p1Cards: p1Cards,
-        p1Coins: p1Coins,
-        p1Life: p1Life,
-        p2Cards: p2Cards,
-        p2Coins: p2Coins,
-        p2Life: p2Life,
-        log: newLog,
-        p1XCards,
-        p2XCards,
-        currentMove: newCurrentMove,
-      };
-      console.log(`card-${card}-rev-${rev}: `, JSON.stringify(data));
-      updateGameState(data);
+      p2Cards = newCards;
+      p2Coins = coins;
+      p2Life = life;
+      turn = rev ? "Player 1" : "Player 2";
+      p2XCards = newXCards;
     }
+
+    const data = {
+      turn,
+      p1Cards: p1Cards,
+      p1Coins: p1Coins,
+      p1Life: p1Life,
+      p2Cards: p2Cards,
+      p2Coins: p2Coins,
+      p2Life: p2Life,
+      log: newLog,
+      p1XCards,
+      p2XCards,
+      currentMove: newCurrentMove,
+    };
+    console.log(`card-${card}-rev-${rev}: `, JSON.stringify(data));
+    updateGameState(data);
+    // }
   }
   function action(act) {
     // setswapCardStyle(currentMove);
@@ -218,6 +234,20 @@ const Playerview = (props) => {
         newCurrentMove = `foreignAid`;
         newLog += `${terP}Foreign Aid\n`;
         break;
+      case "duke":
+        newCurrentMove = `duke`;
+        newLog += `${terP}I have a Duke\n`;
+        break;
+
+      case "ass":
+        newCurrentMove = `ass`;
+        newLog += `${terP}Assassinate Influence\n`;
+        newCoins -= 3;
+        break;
+      case "coup":
+        newCoins -= 7;
+        newLog = `Coup\n`;
+        break;
       // Counter/Response
       case "pass":
         newLog += `${terP}Ok\n`;
@@ -230,6 +260,16 @@ const Playerview = (props) => {
           newOppCoins += 3;
           revTurn = true;
         }
+        // console.log('ass')
+        // console.log(currentMove === "ass")
+
+        if (currentMove === "ass") {
+          // console.log(currentMove === "ass")
+          const lifeRes = removeLife(1, "current");
+          newLife = lifeRes.life;
+          newCurrentMove = lifeRes.str;
+          revTurn = true;
+        }
         break;
       case "cForeignAid":
         newCurrentMove = `cForeignAid`;
@@ -240,26 +280,24 @@ const Playerview = (props) => {
         newLog += `${terP}You don't have a duke\n`;
         const dukeMove = currentMove === "duke" ? "duke" : "";
         // check if opponnent has duke
-        const influence = checkInfluence("duke");
+        const influenceDuke = checkInfluence("duke");
         // console.log("currentMove", currentMove);
-        if (influence.exists) {
+        if (influenceDuke.exists) {
           newLog += `${terPR}has a Duke.\n${terP}lost a life\n`;
           const lifeRes = removeLife(1, "current");
           newLife = lifeRes.life;
-          newCurrentMove = `${lifeRes.str}swap${influence.card}`;
+          newCurrentMove = `${lifeRes.str}swap${influenceDuke.card}`;
           if (dukeMove) {
             newOppCoins += 3;
-            newCurrentMove += `from${dukeMove}`;
+            newCurrentMove += `fromduke`;
           }
-          setswapCardStyle(influence.card);
+          setswapCardStyle(influenceDuke.card);
           // swap duke
           // swapCard();
           if (newCurrentMove.includes("loseInfluence1")) revTurn = true;
         } else {
-          if (dukeMove) {
-            newLog += `${terPR}has no Duke.\n${terPR}lost a life\n`;
-            revTurn = true;
-          } else newLog += `${terPR}has no Duke.\n${terPR}lost a life\n`;
+          newLog += `${terPR}has no Duke.\n${terPR}lost a life\n`;
+          if (dukeMove) revTurn = true;
           const lifeRes = removeLife(1, "");
           newOppLife = lifeRes.life;
           newCurrentMove = lifeRes.str;
@@ -270,18 +308,50 @@ const Playerview = (props) => {
           newCoins += 2;
         }
         break;
-      case "duke":
-        newCurrentMove = `duke`;
-        newLog += `${terP}I have a Duke\n`;
+      case "cAss":
+        newLog += `${terP}You don't have an assassin\n`;
+        // newCurrentMove = `cAss`;
+        const influenceAss = checkInfluence("ass");
+        if (influenceAss.exists) {
+          newLog += `${terPR}has an Assassin.\n${terP}lost 2 lives\n`;
+          const lifeRes = removeLife(2, "current");
+          newLife = lifeRes.life;
+          newCurrentMove = `${lifeRes.str}swap${influenceAss.card}`;
+          newCurrentMove += "fromcAss";
+          setswapCardStyle(influenceAss.card);
+          // if (newCurrentMove.includes("loseInfluence1"))
+          // revTurn = true;
+          console.log("counter assassin liferes");
+          console.log(JSON.stringify(lifeRes));
+        } else {
+          const lifeRes = removeLife(1, "");
+          newOppLife = lifeRes.life;
+          newCurrentMove = lifeRes.str;
+          console.log(JSON.stringify(lifeRes));
+        }
+        revTurn = true;
         break;
-      case "ass":
-        newCurrentMove = `ass`;
-        newLog = `${terP}Assassinate Influence\n`;
-        newCoins -= 3;
+      case "con":
+        newLog += `${terP}I have a Contessa\n`;
+        newCurrentMove = "con";
         break;
-      case "coup":
-        newCoins -= 7;
-        newLog = `Coup\n`;
+
+      case "cCon":
+        newLog += `${terP}You don't have a Contessa\n`;
+        // newCurrentMove = "cCon";
+        const influenceCon = checkInfluence("con");
+        if (influenceCon.exists) {
+          newLog += `${terPR}has a Contessa\n`;
+          const lifeRes = removeLife(1, "current");
+          newLife = lifeRes.life;
+          newCurrentMove = `${lifeRes.str}swap${influenceCon.card}`;
+          setswapCardStyle(influenceCon.card);
+        } else {
+          newLog += `${terPR}has no Contessa\n`;
+          const lifeRes = removeLife(2, "");
+          newOppLife = lifeRes.life;
+          newCurrentMove = `${lifeRes.str}`;
+        }
         break;
       default:
         console.error("Invalid Move");
@@ -336,6 +406,7 @@ const Playerview = (props) => {
   }
   return (
     <div className="grid">
+      {/* first box  */}
       <div className="box">
         <div>
           Lives: {opp.life} <br />
@@ -347,7 +418,6 @@ const Playerview = (props) => {
             const deadCard = player1
               ? p2XCardsG.includes(card)
               : p1XCardsG.includes(card);
-
             return (
               <div
                 className={`flip-card ${
@@ -360,7 +430,11 @@ const Playerview = (props) => {
                   </div>
                   <div class="flip-card-front">
                     <img
-                      src={swapCardStyle === card ? getImage(card) : back}
+                      src={
+                        swapCardStyle === card || deadCard
+                          ? getImage(card)
+                          : back
+                      }
                       alt={``}
                       className={`${deadCard ? `card-dead` : ``} `}
                     />
@@ -371,6 +445,8 @@ const Playerview = (props) => {
           })}
         </div>
       </div>
+
+      {/* second box  */}
       <div className="box">
         Turn: ({move ? "Your" : `${sinoNa}'s`} turn)
         {log && <textarea disabled value={log}></textarea>}
@@ -404,20 +480,29 @@ const Playerview = (props) => {
           />
           <Button
             text={`You don't have an Assassin.`}
-            btnfunction={() => console.log("counter assassin")}
-            disabled={true}
+            btnfunction={() => {
+              action("cAss");
+              console.log("counter assassin");
+            }}
+            disabled={!(move && currentMove === "ass")}
             buttonDes={`button-43`}
           />
           <Button
             text={`I have a Contessa, you can't assassinate an influence.`}
-            btnfunction={() => console.log("counter assassin w contessa")}
-            disabled={true}
+            btnfunction={() => {
+              action("con");
+              console.log("counter assassin w contessa");
+            }}
+            disabled={!(move && currentMove === "ass")}
             buttonDes={`button-44`}
           />
           <Button
             text={`You don't have a Contessa.`}
-            btnfunction={() => console.log("counter contessa")}
-            disabled={true}
+            btnfunction={() => {
+              action("cCon");
+              console.log("counter contessa");
+            }}
+            disabled={!(move && currentMove === "con")}
             buttonDes={`button-43`}
           />
           <Button
@@ -431,6 +516,8 @@ const Playerview = (props) => {
                 move &&
                 (currentMove === "foreignAid" ||
                   currentMove === "duke" ||
+                  currentMove === "ass" ||
+                  currentMove === "con" ||
                   currentMove === "cForeignAid")
               )
             }
@@ -440,6 +527,7 @@ const Playerview = (props) => {
             Pass.
           </button> */}
         </div>
+
         <div>
           MAKE A MOVE
           {/* test  */}
@@ -497,10 +585,10 @@ const Playerview = (props) => {
           <Button
             text={`Swap`}
             btnfunction={() => {
-              let string;
+              let string = currentMove.slice(4);
               if (currentMove.includes("from")) {
-                string = currentMove.slice(4, -8);
-              } else string = currentMove.slice(4);
+                string = string.slice(0, string.indexOf("from"));
+              }
               // const stringRef = string.slice(string.indexOf("from") + 4);
               console.log(`currentMove`);
               console.log(currentMove);
@@ -525,6 +613,8 @@ const Playerview = (props) => {
       <div className="box hold">
         {/* <Card /> */}
         <div>
+          {player}
+          <br />
           Lives: {life} <br />
           Cards: {cards} <br />
           Coins: {coins} <br />
@@ -541,7 +631,9 @@ const Playerview = (props) => {
             return (
               <div
                 className={` ${
-                  (currentLoseInfluence1 || currentLoseInfluence2) && move
+                  (currentLoseInfluence1 || currentLoseInfluence2) &&
+                  move &&
+                  !deadCard
                     ? `card-container`
                     : ``
                 }`}
@@ -550,12 +642,16 @@ const Playerview = (props) => {
                   src={getImage(card)}
                   alt={``}
                   className={`${
-                    (currentLoseInfluence1 || currentLoseInfluence2) && move
+                    (currentLoseInfluence1 || currentLoseInfluence2) &&
+                    move &&
+                    !deadCard
                       ? `hover-en`
                       : ``
                   } ${deadCard ? `card-dead` : ``}`}
                   title={
-                    (currentLoseInfluence1 || currentLoseInfluence2) && move
+                    (currentLoseInfluence1 || currentLoseInfluence2) &&
+                    move &&
+                    !deadCard
                       ? `Give up this card`
                       : ``
                   }
