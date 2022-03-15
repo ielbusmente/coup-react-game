@@ -6,6 +6,11 @@ import { Link, useParams } from "react-router-dom";
 import Playerview from "./PlayerView";
 import CARDS from "../utils/cards";
 import Pending from "./Pending";
+// sounds
+import Howler from "react-howler";
+//https://www.youtube.com/watch?v=P3nENGCxAXc
+import bgMusic from "../sounds/bg.mp3";
+import gobgMusic from "../sounds/gameover.mp3";
 
 let socket;
 const PORT = "http://localhost:3001";
@@ -223,6 +228,18 @@ const Gamestate = () => {
                 currentMove={currentMove}
                 p1XCardsG={p1XCards}
                 p2XCardsG={p2XCards}
+              />
+              <Howler
+                src={bgMusic}
+                playing={!gameOver}
+                loop={true}
+                volume={0.5}
+              />
+              <Howler
+                src={gobgMusic}
+                playing={gameOver}
+                loop={true}
+                volume={0.5}
               />
             </>
           )}
