@@ -192,7 +192,8 @@ const Gamestate = () => {
           {players.length === 1 && (
             <Pending code={room} currentPlayer={currentPlayer} />
           )}
-
+          {/* test  */}
+          {/* {true && ( */}
           {players.length === 2 && (
             <>
               {/* {!gameOver && (
@@ -214,7 +215,7 @@ const Gamestate = () => {
                         <h1>GAME OVER</h1>
                         <h2>{winner} wins!</h2>
                         <Link to={`/`}>
-                          <Button text={`Play Again`} buttonDes={`button-44`} />
+                          <Button text={`PLAY AGAIN`} buttonDes={`button-44`} />
                         </Link>
                       </div>
                     </div>
@@ -240,13 +241,13 @@ const Gamestate = () => {
                 src={bgMusic}
                 playing={!gameOver}
                 loop={true}
-                volume={0.5}
+                volume={0.1}
               />
               <Howler
                 src={gobgMusic}
                 playing={gameOver}
                 loop={true}
-                volume={0.5}
+                volume={0.1}
               />
             </>
           )}

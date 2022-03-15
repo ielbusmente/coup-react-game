@@ -1,24 +1,70 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import codeGen from "../utils/codeGenerator";
+import Button from "./tryButton";
 
 const Lobby = () => {
   const [code, setcode] = useState("");
   console.log(`lobby`);
   return (
-    <div>
-      <input
-        placeholder="Game Code"
-        onChange={(e) => setcode(e.target.value)}
-      />
-      <Link to={`/play/${code}`}>
-        <button className="">Join</button>
-      </Link>
+    <div
+      style={{
+        display: `flex`,
+        flexDirection: `column`,
+        alignItems: "center",
+        justifyContent: "center",
+        margin: "20px",
+        padding: "20px",
+        textAlign: "center",
+        boxSizing: "border-box",
+      }}
+    >
+      <div style={{ fontSize: `3rem`, fontWeight: "bold", margin: "30px 0 " }}>
+        Mini Coup
+      </div>
+      <div style={{ margin: `10px`, width: `50%`, display: "flex" }}>
+        <input
+          style={{
+            // margin: `10px`,
+            flex: "1",
+            padding: `10px`,
+            fontSize: `1.5rem`,
+          }}
+          placeholder="Game Code"
+          onChange={(e) => setcode(e.target.value)}
+        />
+        <div style={{ flexShrink: "0" }}>
+          <Link to={`/play/${code}`}>
+            <Button text={`Join`} buttonDes={`button-44`} />
+            {/* <button className="">Join</button> */}
+          </Link>
+        </div>
+      </div>
 
-      <div className="homepage-create">
+      <div className="" style={{ margin: `10px`, width: `50%` }}>
         <Link to={`/play/${codeGen(5)}`}>
-          <button className="">Create Room</button>
+          <Button text={`Create Room`} buttonDes={`button-44`} />
+          {/* <button className="">Create Room</button> */}
         </Link>
+      </div>
+      <div className="instructions">
+        <h2>Bluff (and call bluffs!) to victory in this card game.</h2>
+        <h3>
+          Artist: Behnam Balali, Luis Francisco, Stephanie Gustafsson, Andrew
+          Higgins + 8 more <br />
+          Publisher: Indie Boards & Cards, La Mame Games and many more
+        </h3>
+        <h1>Instructions</h1>
+        Take 1 Action
+        <ul>
+          <li>Income: Get 1 coin (can't be countered)</li>
+          <li>Income: Get 1 coin (can't be countered)</li>
+          <li>Income: Get 1 coin (can't be countered)</li>
+          <li>Income: Get 1 coin (can't be countered)</li>
+          <li>Income: Get 1 coin (can't be countered)</li>
+          <li>Income: Get 1 coin (can't be countered)</li>
+          <li>Income: Get 1 coin (can't be countered)</li>
+        </ul>
       </div>
     </div>
   );

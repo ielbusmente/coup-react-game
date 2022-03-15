@@ -24,6 +24,16 @@ app.use(cors());
 //   },
 // });
 
+//deployment
+// if (process.env.NODE_ENV !== "production")
+//   require("dotenv").config({ path: "config.env" });
+// if (process.env.NODE_ENV === "production") {
+//   app.use(express.static(path.join(__dirname, "../client/build")));
+//   app.get("*", (req, res) => {
+//     res.sendFile(path.resolve(__dirname, "../client/build/index.html"));
+//   });
+// }
+
 // let counter = 0
 // io.on("connection", (socket) => {
 //   // leave
@@ -117,6 +127,11 @@ io.on("connection", (socket) => {
 //   });
 // }
 
-server.listen(PORT, () => {
+// local
+// server.listen(PORT, () => {
+//   console.log(`Server running on port ${PORT}`);
+// });
+// heroku
+server.listen(process.env.PORT || PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

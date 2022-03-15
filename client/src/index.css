@@ -11,3 +11,22 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+button,
+input {
+  font-family: "Orbitron", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+    "Helvetica Neue", sans-serif;
+  font-size: 0.69rem;
+  font-weight: bold;
+}
+
+@media (min-width: 1200px) {
+  button {
+    font-size: 0.869rem;
+  }
+}
+
+a {
+  text-decoration: none;
+}

@@ -454,7 +454,7 @@ const Playerview = (props) => {
         <div>
           CHALLENGE?
           {/* test  */}
-          <button onClick={endGame}>End Game</button>
+          {/* <button onClick={endGame}>End Game</button> */}
           <Button
             text={`I have a Duke, you can't use Foreign Aid.`}
             btnfunction={() => {
@@ -627,7 +627,7 @@ const Playerview = (props) => {
           />
         </div>
       </div>
-      <div className="box hold">
+      <div className="box">
         {/* <Card /> */}
         <div>
           {player}
@@ -647,7 +647,7 @@ const Playerview = (props) => {
               : p2XCardsG.includes(card);
             return (
               <div
-                className={` ${
+                className={`current-player-card ${
                   (currentLoseInfluence1 || currentLoseInfluence2) &&
                   move &&
                   !deadCard
@@ -655,35 +655,42 @@ const Playerview = (props) => {
                     : ``
                 }`}
               >
-                <img
-                  src={getImage(card)}
-                  alt={``}
-                  className={`${
-                    (currentLoseInfluence1 || currentLoseInfluence2) &&
-                    move &&
-                    !deadCard
-                      ? `hover-en`
-                      : ``
-                  } ${deadCard ? `card-dead` : ``}`}
-                  title={
-                    (currentLoseInfluence1 || currentLoseInfluence2) &&
-                    move &&
-                    !deadCard
-                      ? `Give up this card`
-                      : ``
-                  }
-                  onClick={() => {
-                    console.log(`card ${card}`);
-                    if (!deadCard) {
-                      if (currentLoseInfluence1 && move) {
-                        removeCard(card, !currentMove.includes("fromasspass"));
+                <div className="current-inner">
+                  <div className="current-face">
+                    <img
+                      src={getImage(card)}
+                      alt={``}
+                      className={`${
+                        (currentLoseInfluence1 || currentLoseInfluence2) &&
+                        move &&
+                        !deadCard
+                          ? `hover-en`
+                          : ``
+                      } ${deadCard ? `card-dead` : ``}`}
+                      title={
+                        (currentLoseInfluence1 || currentLoseInfluence2) &&
+                        move &&
+                        !deadCard
+                          ? `Give up this card`
+                          : ``
                       }
-                      if (currentLoseInfluence2 && move) {
-                        removeCard(card, currentMove.includes("fromcDuke"));
-                      }
-                    }
-                  }}
-                />
+                      onClick={() => {
+                        console.log(`card ${card}`);
+                        if (!deadCard) {
+                          if (currentLoseInfluence1 && move) {
+                            removeCard(
+                              card,
+                              !currentMove.includes("fromasspass")
+                            );
+                          }
+                          if (currentLoseInfluence2 && move) {
+                            removeCard(card, currentMove.includes("fromcDuke"));
+                          }
+                        }
+                      }}
+                    />
+                  </div>
+                </div>
               </div>
             );
           })}
@@ -696,11 +703,13 @@ const Playerview = (props) => {
           src={assMusic}
           playing={assassinMusic}
           onEnd={() => setassassinMusic(false)}
+          volume={0.3}
         />
         <Howler
           src={incMusic}
           playing={incomeMusic}
           onEnd={() => setincomeMusic(false)}
+          volume={0.3}
         />
         {/* <Howler
           src={dukMusic}
@@ -711,11 +720,13 @@ const Playerview = (props) => {
           src={conMusic}
           playing={contessaMusic}
           onEnd={() => setcontessaMusic(false)}
+          volume={0.3}
         />
         <Howler
           src={counMusic}
           playing={counterMusic}
           onEnd={() => setcounterMusic(false)}
+          volume={0.3}
         />
       </div>
     </div>
