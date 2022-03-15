@@ -304,9 +304,11 @@
   overflow: hidden;
 }
 
-.game-over-container > h1,
-.game-over-container > h2 {
+.float-above {
   z-index: 4;
+}
+.float-above > h1,
+.float-above > h2 {
   font-weight: bold;
   font-size: 3rem;
   animation: gameOverTextAnim 5s infinite;

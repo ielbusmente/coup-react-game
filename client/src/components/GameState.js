@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import shuffle from "../utils/shuffleDeck";
+// import codeGen from "../utils/codeGenerator";
 import io from "socket.io-client";
 // import queryString from "query-string";
 import { Link, useParams } from "react-router-dom";
@@ -11,6 +12,7 @@ import Howler from "react-howler";
 //https://www.youtube.com/watch?v=P3nENGCxAXc
 import bgMusic from "../sounds/bg.mp3";
 import gobgMusic from "../sounds/gameover.mp3";
+import Button from "./tryButton";
 
 let socket;
 const PORT = "http://localhost:3001";
@@ -208,8 +210,13 @@ const Gamestate = () => {
                   {winner !== "" && (
                     <div className="game-over-container">
                       <div className="game-over"></div>
-                      <h1>GAME OVER</h1>
-                      <h2>{winner} wins!</h2>
+                      <div className="float-above">
+                        <h1>GAME OVER</h1>
+                        <h2>{winner} wins!</h2>
+                        <Link to={`/`}>
+                          <Button text={`Play Again`} buttonDes={`button-44`} />
+                        </Link>
+                      </div>
                     </div>
                   )}
                 </div>
