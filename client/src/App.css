@@ -360,3 +360,36 @@ input {
 .instructions ul {
   list-style: none;
 }
+
+.swap-effect {
+  animation: swap 4s infinite;
+}
+
+@keyframes swap {
+  0% {
+    transform: rotateY(0deg);
+    /* margin-right: 10px; */
+  }
+  25% {
+    transform: rotateY(20deg);
+    margin-right: 50px;
+
+    /* margin-top: 15px; */
+  }
+  50% {
+    transform: rotateY(0deg);
+  }
+
+  75% {
+    transform: rotateY(-20deg);
+    margin-right: 50px;
+    /* margin-top: 15px; */
+  }
+  100% {
+    transform: rotateY(0deg);
+  }
+}
+
+.lose-life {
+  background-color: #8d0000;
+}
