@@ -68,6 +68,8 @@ body {
 
 .grid .box img {
   width: 100%;
+  border-radius: 35px;
+  height: 100%;
 }
 
 /* cards  */
@@ -150,8 +152,10 @@ body {
 }
 .current-player-card {
   /* margin: 10px; */
-  width: 40%;
+  width: 30%;
   perspective: 1000px;
+  
+
   /* min-height: 30vh; */
 }
 @media (min-width: 1200px) {

@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import "../App.css";
 
 //refactor
-import duke from "../cards/duke.jpeg";
-import ass from "../cards/assassin.jpeg";
-import con from "../cards/contessa.jpeg";
+import duke from "../cards/duke-edited.jpeg";
+import ass from "../cards/assassin-edited.jpeg";
+import con from "../cards/contessa-edited.jpeg";
 import back from "../cards/backcards.png";
 
 // components
