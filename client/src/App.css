@@ -360,6 +360,11 @@ input {
 
 .instructions {
   margin-top: 50px;
+  font-family: "Raleway";
+  
+}
+.instructions h1 {
+  font-family: "Roboto Slab";
 }
 .instructions ul {
   list-style: none;

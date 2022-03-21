@@ -48,23 +48,31 @@ const Lobby = () => {
         </Link>
       </div>
       <div className="instructions">
-        <h2>Bluff (and call bluffs!) to victory in this card game.</h2>
+        <h1>Bluff and call bluffs to Victory! </h1>
+        
+        <br/>
+        <h1>Instructions</h1>
+        Moves of the Game
+        <ul>
+          <br/>
+          <li>Income: Get 1 coin <br/>(can't be countered)</li>
+          <br/>
+          <li>Foreign Aid: Get 2 coins from Foreign Aid <br/>(can be countered if the other player claims to have a Duke)</li>
+          <br/>
+          <li>I have a Duke: Get 3 coins if you claim you have a Duke <br/> (can be countered when the other player calls it a bluff)</li>
+          <br/>
+          <li>Assasinate: Pay 3 coins and the other player selects an Influence to be killed <br/>(can be countered by a Contessa or a bluff call )</li>
+          <br/>
+          <li>Coup: Pay 7 coins, Remove an Influence from opponent <br/>(can't be countered)</li>
+          <br/>
+          <li>Swap: Opponent swaps an Influence from your deck  <br/>(can't be countered)</li>
+        </ul>
+        <br/>
         <h3>
           Artist: Behnam Balali, Luis Francisco, Stephanie Gustafsson, Andrew
           Higgins + 8 more <br />
           Publisher: Indie Boards & Cards, La Mame Games and many more
         </h3>
-        <h1>Instructions</h1>
-        Take 1 Action
-        <ul>
-          <li>Income: Get 1 coin (can't be countered)</li>
-          <li>Income: Get 1 coin (can't be countered)</li>
-          <li>Income: Get 1 coin (can't be countered)</li>
-          <li>Income: Get 1 coin (can't be countered)</li>
-          <li>Income: Get 1 coin (can't be countered)</li>
-          <li>Income: Get 1 coin (can't be countered)</li>
-          <li>Income: Get 1 coin (can't be countered)</li>
-        </ul>
       </div>
     </div>
   );
