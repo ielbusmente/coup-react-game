@@ -11,8 +11,7 @@ import back from "../cards/backcards.png";
 import Button from "./tryButton";
 // utils
 import shuffle from "../utils/shuffleDeck";
-import formatCard from "../utils/formatCard";
-import { Link } from "react-router-dom";
+import formatCard from "../utils/formatCard"; 
 
 // sounds
 //https://www.youtube.com/watch?v=jlcLzC5bIf0&t=15s
@@ -449,9 +448,9 @@ const Playerview = (props) => {
       {/* first box  */}
       <div className="box">
         <div>
-          Lives: {opp.life} <br />
-          Cards: {opp.cards} <br />
-          Coins: {opp.coins} <br />
+           <div>Lives: {opp.life}</div>
+          {/* Cards: {opp.cards} <br /> */}
+           <div>Coins: {opp.coins}</div>
         </div>
         <div className="cards">
           {opp["cards"].map((card) => {
@@ -672,11 +671,13 @@ const Playerview = (props) => {
       <div className={`box`}>
         {/* <Card /> */}
         <div>
-          {player}
-          <br />
-          Lives: {life} <br />
-          Cards: {cards} <br />
-          Coins: {coins} <br />
+        <div>   Lives: {life}  </div>
+          <div> {player} </div>
+         
+          <div>  Coins: {coins}  </div> 
+       
+          {/* Cards: {cards} <br /> */}
+        
           {/* <button onClick={() => setloseLife(true)}>set bg</button> */}
         </div>
         <div className="cards">
@@ -698,7 +699,7 @@ const Playerview = (props) => {
                     : ``
                 }`}
               >
-                <div className="current-inner">
+                {/* <div className="current-inner"> */}
                   <div className="current-face">
                     <img
                       src={getImage(card)}
@@ -742,14 +743,10 @@ const Playerview = (props) => {
                     />
                   </div>
                 </div>
-              </div>
+              // </div>
             );
           })}
-        </div>
-        <Link to={`/`}>
-          <button className="">QUIT</button>
-        </Link>
-
+        </div>  
         <Howler
           src={assMusic}
           playing={assassinMusic}

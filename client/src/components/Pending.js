@@ -1,6 +1,4 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import Button from "./tryButton";
+import React from "react"; 
 
 const Pending = ({ code, currentPlayer }) => {
   const styleObj = { margin: "20px", padding: "20px" };
@@ -19,11 +17,7 @@ const Pending = ({ code, currentPlayer }) => {
       )}
       {currentPlayer === "Player 1" && (
         <h1 style={styleObj}>Waiting for Player 2 to join the game.</h1>
-      )}
-      <Link to={`/`}>
-        <Button text={`QUIT`} buttonDes={"button-44"} />
-        {/* <button className="">QUIT</button> */}
-      </Link>
+      )} 
     </div>
   );
 };
