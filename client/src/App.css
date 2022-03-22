@@ -174,10 +174,10 @@ textarea {
 @media (min-width: 1200px) { 
   .flip-card,
   .current-player-card {
-    width: 28%;
+    width: 24%; 
   }
   .grid .box img {
-    width: 70%;
+    width: 100%;
   }
   .box > div > button {
     margin: 10px 0;

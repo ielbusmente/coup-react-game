@@ -15,7 +15,7 @@
   },
   "author": "Busmente, E. & Francisco, R. (4-ITH)",
   "license": "ISC",
-  "devDpendencies": {
+  "devDependencies": {
     "nodemon": "^2.0.15",
     "concurrently": "^7.0.0"
   },
