@@ -15,7 +15,8 @@ import gobgMusic from "../sounds/gameover.mp3";
 import Button from "./tryButton";
 
 let socket;
-const PORT = "http://localhost:3001";
+// const PORT = "http://localhost:3001";
+const PORT = "https://mini-coup-react.herokuapp.com/";
 
 const Gamestate = () => {
   const params = useParams();
