@@ -38,7 +38,8 @@ const Gamestate = () => {
   const [p1XCards, setp1XCards] = useState([]);
   const [p2XCards, setp2XCards] = useState([]);
   const [deck, setdeck] = useState([]);
-  const [log, setlog] = useState([]);
+  const [log, setlog] = useState('');
+  const [hiddenLog, sethiddenLog] = useState('');
   const [currentMove, setcurrentMove] = useState(``);
 
   // connection
@@ -92,7 +93,7 @@ const Gamestate = () => {
   useEffect(() => {
     socket.on(
       "startGame",
-      ({ gameOver, turn, p1Cards, p2Cards, deck, log }) => {
+      ({ gameOver, turn, p1Cards, p2Cards, deck, log,hiddenLog }) => {
         console.log("startGame from server");
         setgameOver(gameOver);
         setturn(turn);
@@ -100,6 +101,7 @@ const Gamestate = () => {
         setp2({ ...p2, cards: p2Cards });
         setdeck(deck);
         setlog(log);
+        sethiddenLog(hiddenLog);
         setcurrentMove(``);
       }
     );
@@ -117,6 +119,7 @@ const Gamestate = () => {
         p2Coins,
         p2Life,
         log,
+        hiddenLog,
         currentMove,
         winner,
         p1XCards,
@@ -137,6 +140,7 @@ const Gamestate = () => {
           setp2({ coins: p2Coins, life: p2Life, cards: p2Cards });
         deck && setdeck(deck);
         log && setlog(log);
+        hiddenLog && sethiddenLog(hiddenLog);
         p1XCards && setp1XCards(p1XCards);
         p2XCards && setp2XCards(p2XCards);
         setcurrentMove(currentMove);
@@ -217,6 +221,7 @@ const Gamestate = () => {
                         <Link to={`/`}>
                           <Button text={`PLAY AGAIN`} buttonDes={`button-44`} />
                         </Link>
+                        {hiddenLog && <textarea disabled value={hiddenLog}></textarea>}
                       </div>
                     </div>
                   )}
@@ -231,6 +236,7 @@ const Gamestate = () => {
                 life={currentPlayer === "Player 1" ? p1["life"] : p2["life"]}
                 opp={currentPlayer === "Player 1" ? p2 : p1}
                 log={log}
+                hiddenLog={hiddenLog}
                 updateGameState={updateGameState}
                 deck={deck}
                 currentMove={currentMove}

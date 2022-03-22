@@ -16,10 +16,15 @@ import formatCard from "../utils/formatCard";
 // sounds
 //https://www.youtube.com/watch?v=jlcLzC5bIf0&t=15s
 import assMusic from "../sounds/ass.mp3";
-import incMusic from "../sounds/income.mp3";
-// import dukMusic from "../sounds/duke.mp3";
+import incMusic from "../sounds/income.mp3"; 
 import conMusic from "../sounds/cont.mp3";
 import counMusic from "../sounds/counter.mp3";
+
+import dukMusic from "../sounds/duke.mp3";
+import loseLifeMusic from '../sounds/lost-life.mp3'
+import swapCardMusic from '../sounds/swap-cards.mp3'
+import pass from '../sounds/pass.mp3'
+
 
 import Howler from "react-howler";
 
@@ -32,6 +37,7 @@ const Playerview = (props) => {
     opp, //opponent object
     life, //life of the current player
     log, //log string
+    hiddenLog, //complete log string
     updateGameState, //update game state function
     deck, //draw pile
     currentMove, //string description kung ano na ganap
@@ -43,10 +49,12 @@ const Playerview = (props) => {
   const [assassinMusic, setassassinMusic] = useState(false);
   const [counterMusic, setcounterMusic] = useState(false);
   const [currentLife, setcurrentLife] = useState(3);
-  // const [dukeMusic, setdukeMusic] = useState(false);
+  const [dukeMusic, setdukeMusic] = useState(false);
   const [contessaMusic, setcontessaMusic] = useState(false);
   const [incomeMusic, setincomeMusic] = useState(false);
-  const [loseLife, setloseLife] = useState(false);
+  const [loseLife, setloseLife] = useState(false); 
+  const [sCMusic, setsCMusic] = useState(false); 
+  const [passMusic, setpassMusic] = useState(false); 
 
   //to flip reveal the card
   const [swapCardStyle, setswapCardStyle] = useState("");
@@ -95,9 +103,9 @@ const Playerview = (props) => {
   }, [currentMove]);
 
   // test functions
-  function endGame() {
-    updateGameState({ gameOver: true, winner: "asdf" });
-  }
+  // function endGame() {
+  //   updateGameState({ gameOver: true, winner: "asdf" });
+  // }
 
   /**removes (minusLife) life from (kanino)
    * -minusLife wants number
@@ -135,30 +143,32 @@ const Playerview = (props) => {
   }
   /**swaps (card) from the current player's hand with a card from the deck */
   function swapCard(card) {
+    setsCMusic(true)
     const rev = currentMove.includes(`from`);
     let newCards = cards;
     let newDeck = deck;
     const swapIndex = newCards.indexOf(card); //index ng tatanggalin na card
     const cardStr = card.slice(0, -1); //card string
     let newLog = `${log}${terP}Put ${formatCard(cardStr)} in the deck\n`;
+    let newHLog = `${hiddenLog}${terP}Put ${formatCard(cardStr)} (${card}) in the deck\n`;
     //delete card from hand
     delete newCards[swapIndex];
-    // push card from hand to the draw pile
-    newDeck.push(card);
-    // test
-    newLog += `Deck: ${newDeck}\n`;
+    // put card from hand to the draw pile
+    newDeck.unshift(card); 
+    newHLog += `Deck: [${newDeck}]\n`;
     // shuffle deck
     newDeck = shuffle(newDeck);
-    newLog += `Deck Shuffled.\n`;
-    // test
-    newLog += `Deck: ${newDeck}\n`;
+    newLog += `Deck Shuffled.\n`; 
+    newHLog += `Deck Shuffled.\n`; 
+
+    newHLog += `Deck: [${newDeck}]\n`;
     // draw card and give card to player
     const newCard = newDeck.pop();
     newCards[swapIndex] = newCard;
 
     newLog += `${terP}Given a card from the deck.\n`;
-    // test
-    newLog += `${terP}got ${newCard}\n`;
+    newHLog += `${terP}Given a ${formatCard(newCard.slice(0, -1))} (${newCard}) from the deck.\n`;
+      
 
     // update game state
     let p1Cards, p1Coins, p1Life, p2Cards, p2Coins, p2Life, turn;
@@ -184,15 +194,17 @@ const Playerview = (props) => {
       p2Coins: p2Coins,
       p2Life: p2Life,
       log: newLog,
+      hiddenLog: newHLog,
       currentMove: "",
     };
-    console.log(`swap card-${card}: `, JSON.stringify(data));
+    // console.log(`swap card-${card}: `, JSON.stringify(data));
     updateGameState(data);
   }
   /**remove (card) of the current player
    * -(rev) determines who is the next
    */
   function removeCard(card, rev) {
+    setsCMusic(true)
     let newCurrentMove = currentMove.slice(14);
     if (
       newCurrentMove === "fromcDuke" ||
@@ -204,7 +216,8 @@ const Playerview = (props) => {
     let newXCards = player1 ? p1XCardsG : p2XCardsG;
     // puts card in current players graveyard
     newXCards.push(card);
-    let newLog = `${log}${terP}Lost an Influence.\n`;
+    let newLog = `${log}${terP}Lost an Influence. Card: ${formatCard(card.slice(0, -1))}\n`; 
+    let newHLog = `${hiddenLog}${terP}Lost an Influence. Card: ${formatCard(card.slice(0, -1))}\n`;
     let p1Cards,
       p1Coins,
       p1Life,
@@ -236,11 +249,12 @@ const Playerview = (props) => {
       p2Coins: p2Coins,
       p2Life: p2Life,
       log: newLog,
+      hiddenLog: newHLog,
       p1XCards,
       p2XCards,
       currentMove: newCurrentMove,
     };
-    console.log(`card-${card}-rev-${rev}: `, JSON.stringify(data));
+    // console.log(`card-${card}-rev-${rev}: `, JSON.stringify(data));
     updateGameState(data);
   }
   /**main function called when a player makes a move */
@@ -253,6 +267,7 @@ const Playerview = (props) => {
     let newOppLife = opp["life"];
     //game data
     let newLog = log;
+    let newHLog = hiddenLog;
     let revTurn = false;
     let newCurrentMove = "";
 
@@ -260,24 +275,29 @@ const Playerview = (props) => {
       // Move
       case "income":
         newCoins += 1;
-        newLog += `${terP}Income\n`;
+        newLog += `--\n${terP}Income\n`;
+        newHLog += `--\n${terP}Income\n`;
         break;
       case "foreignAid":
         newCurrentMove = `foreignAid`;
-        newLog += `${terP}Foreign Aid\n`;
+        newLog += `--\n${terP}Foreign Aid\n`;
+        newHLog += `--\n${terP}Foreign Aid\n`;
         break;
       case "duke":
         newCurrentMove = `duke`;
-        newLog += `${terP}I have a Duke\n`;
+        newLog += `--\n${terP}I have a Duke\n`;
+        newHLog += `--\n${terP}I have a Duke\n`;
         break;
       case "ass":
         newCurrentMove = `ass`;
-        newLog += `${terP}Assassinate Influence\n`;
+        newLog += `--\n${terP}Assassinate Influence\n`;
+        newHLog += `--\n${terP}Assassinate Influence\n`;
         newCoins -= 3;
         break;
       case "coup":
         newCoins -= 7;
-        newLog += `${terP}Coup\n`;
+        newLog += `--\n${terP}Coup\n`;
+        newHLog += `--\n${terP}Coup\n`;
         const lifeRes = removeLife(1, "");
         newOppLife = lifeRes.life;
         newCurrentMove = lifeRes.str;
@@ -285,12 +305,17 @@ const Playerview = (props) => {
       // Counter/Response
       case "pass":
         newLog += `${terP}Ok\n`;
+        newHLog += `${terP}Ok\n`;
         if (currentMove === "foreignAid") {
           newOppCoins += 2;
+          newLog +=`${terPR}Gained 2 coins\n`
+          newHLog +=`${terPR}Gained 2 coins\n`
           revTurn = true;
         }
         if (currentMove === "duke") {
           newOppCoins += 3;
+          newLog +=`${terPR}Gained 3 coins\n`
+          newHLog +=`${terPR}Gained 3 coins\n`
           revTurn = true;
         }
         if (currentMove === "ass") {
@@ -306,20 +331,26 @@ const Playerview = (props) => {
       case "cForeignAid":
         newCurrentMove = `cForeignAid`;
         newLog += `${terP}I have a duke, counter Foreign Aid\n`;
+        newHLog += `${terP}I have a duke, counter Foreign Aid\n`;
         break;
       case "cDuke":
         newLog += `${terP}You don't have a duke\n`;
+        newHLog += `${terP}You don't have a duke\n`;
         const dukeMove = currentMove === "duke" ? "duke" : "";
         // check if opponnent has duke
         const influenceDuke = checkInfluence("duke");
         // console.log("currentMove", currentMove);
         if (influenceDuke.exists) {
+          setsCMusic(true)
           newLog += `${terPR}has a Duke.\n${terP}lost a life\n`;
+          newHLog += `${terPR}has a Duke.\n${terP}lost a life\n`;
           const lifeRes = removeLife(1, "current");
           newLife = lifeRes.life;
           newCurrentMove = `${lifeRes.str}swap${influenceDuke.card}`;
           if (dukeMove) {
             newOppCoins += 3;
+            newLog +=`${terPR}Gained 3 coins\n`
+            newHLog +=`${terPR}Gained 3 coins\n`
             newCurrentMove += `fromduke`;
           }
           setswapCardStyle(influenceDuke.card);
@@ -328,23 +359,34 @@ const Playerview = (props) => {
           if (newCurrentMove.includes("loseInfluence1")) revTurn = true;
         } else {
           newLog += `${terPR}has no Duke.\n${terPR}lost a life\n`;
-          if (dukeMove) revTurn = true;
+          newHLog += `${terPR}has no Duke.\n${terPR}lost a life\n`; 
+          if (dukeMove) 
+            revTurn = true; 
+          else {
+            newCoins += 2;
+            newLog += `${terP}Gain 2 coins\n`;
+            newHLog += `${terP}Gain 2 coins\n`;
+          } 
           const lifeRes = removeLife(1, "");
           newOppLife = lifeRes.life;
           newCurrentMove = lifeRes.str;
           if (lifeRes.str.includes(`loseInfluence2`)) {
             revTurn = false;
-            newCurrentMove += "fromcDuke";
+            if (dukeMove) newCurrentMove += "fromcDuke"; 
+            //else newCurrentMove += "fromDuke"
           }
-          newCoins += 2;
+          
         }
         break;
       case "cAss":
         newLog += `${terP}You don't have an assassin\n`;
+        newHLog += `${terP}You don't have an assassin\n`;
         // newCurrentMove = `cAss`;
         const influenceAss = checkInfluence("ass");
         if (influenceAss.exists) {
+          setsCMusic(true)
           newLog += `${terPR}has an Assassin.\n${terP}lost 2 lives\n`;
+          newHLog += `${terPR}has an Assassin.\n${terP}lost 2 lives\n`;
           const lifeRes = removeLife(2, "current");
           newLife = lifeRes.life;
           newCurrentMove = `${lifeRes.str}swap${influenceAss.card}`;
@@ -352,14 +394,14 @@ const Playerview = (props) => {
           setswapCardStyle(influenceAss.card);
           // if (newCurrentMove.includes("loseInfluence1"))
           // revTurn = true;
-          console.log("counter assassin liferes");
-          console.log(JSON.stringify(lifeRes));
+          // console.log("counter assassin liferes");
+          // console.log(JSON.stringify(lifeRes));
           if (newCurrentMove.includes("loseInfluence1")) revTurn = true;
         } else {
           const lifeRes = removeLife(1, "");
           newOppLife = lifeRes.life;
           newCurrentMove = lifeRes.str;
-          console.log(JSON.stringify(lifeRes));
+          // console.log(JSON.stringify(lifeRes));
 
           if (!lifeRes.str.includes(`loseInfluence2`)) {
             revTurn = true;
@@ -371,25 +413,33 @@ const Playerview = (props) => {
         break;
       case "con":
         newLog += `${terP}I have a Contessa\n`;
+        newHLog += `${terP}I have a Contessa\n`;
         newCurrentMove = "con";
         break;
 
       case "cCon":
         newLog += `${terP}You don't have a Contessa\n`;
+        newHLog += `${terP}You don't have a Contessa\n`;
         // newCurrentMove = "cCon";
         const influenceCon = checkInfluence("con");
         if (influenceCon.exists) {
-          newLog += `${terPR}has a Contessa\n`;
+          setsCMusic(true)
+          newLog += `${terPR}has a Contessa\n${terP}lost a life\n`;
+          newHLog += `${terPR}has a Contessa\n${terP}lost a life\n`;
           const lifeRes = removeLife(1, "current");
           newLife = lifeRes.life;
           newCurrentMove = `${lifeRes.str}swap${influenceCon.card}`;
           setswapCardStyle(influenceCon.card);
           if (newCurrentMove.includes("loseInfluence1")) revTurn = true;
         } else {
-          newLog += `${terPR}has no Contessa\n`;
+          newLog += `${terPR}has no Contessa\n${terPR}lost 2 lives\n`;
+          newHLog += `${terPR}has no Contessa\n${terPR}lost 2 lives\n`;
           const lifeRes = removeLife(2, "");
           newOppLife = lifeRes.life;
           newCurrentMove = `${lifeRes.str}`;
+          // if (lifeRes.str.includes(`loseInfluence2`)) { 
+          //   newCurrentMove += "fromcCon";
+          // }
         }
         break;
       default:
@@ -425,9 +475,10 @@ const Playerview = (props) => {
       p2Coins: p2Coins,
       p2Life: p2Life,
       log: newLog,
+      hiddenLog: newHLog,
       currentMove: newCurrentMove,
     };
-    console.log(`${act}: `, JSON.stringify(data));
+    // console.log(`${act}: `, JSON.stringify(data));
     updateGameState(data);
   }
   function getImage(influence) {
@@ -457,10 +508,11 @@ const Playerview = (props) => {
             const deadCard = player1
               ? p2XCardsG.includes(card)
               : p1XCardsG.includes(card);
+              let flipTheCard = swapCardStyle === card || deadCard 
             return (
               <div
                 className={`flip-card ${
-                  swapCardStyle === card || deadCard ? `flip` : ""
+                  flipTheCard? `flip` : ""
                 }`}
               >
                 <div className="flip-card-inner">
@@ -470,7 +522,7 @@ const Playerview = (props) => {
                   <div className="flip-card-front">
                     <img
                       src={
-                        swapCardStyle === card || deadCard
+                        flipTheCard
                           ? getImage(card)
                           : back
                       }
@@ -500,7 +552,7 @@ const Playerview = (props) => {
             btnfunction={() => {
               action("cForeignAid");
               setcounterMusic(true);
-              return console.log(`counter foreign aid`);
+              // return console.log(`counter foreign aid`);
             }}
             buttonDes={`button-43`}
             disabled={currentMove !== "foreignAid" || !move}
@@ -510,7 +562,7 @@ const Playerview = (props) => {
             btnfunction={() => {
               action("cDuke");
               setcounterMusic(true);
-              return console.log(`counter duke`);
+              // return console.log(`counter duke`);
             }}
             disabled={
               !(
@@ -525,7 +577,7 @@ const Playerview = (props) => {
             btnfunction={() => {
               action("cAss");
               setcounterMusic(true);
-              console.log("counter assassin");
+              // console.log("counter assassin");
             }}
             disabled={!(move && currentMove === "ass")}
             buttonDes={`button-43`}
@@ -535,7 +587,7 @@ const Playerview = (props) => {
             btnfunction={() => {
               action("con");
               setcontessaMusic(true);
-              console.log("counter assassin w contessa");
+              // console.log("counter assassin w contessa");
             }}
             disabled={!(move && currentMove === "ass")}
             buttonDes={`button-44`}
@@ -545,7 +597,7 @@ const Playerview = (props) => {
             btnfunction={() => {
               action("cCon");
               setcounterMusic(true);
-              console.log("counter contessa");
+              // console.log("counter contessa");
             }}
             disabled={!(move && currentMove === "con")}
             buttonDes={`button-43`}
@@ -554,7 +606,8 @@ const Playerview = (props) => {
             text={`Pass.`}
             btnfunction={() => {
               action("pass");
-              console.log("no counter");
+              setpassMusic(true);
+              // console.log("no counter");
             }}
             disabled={
               !(
@@ -619,7 +672,7 @@ const Playerview = (props) => {
             text={`I have a Duke`}
             btnfunction={() => {
               action("duke");
-              // setdukeMusic(true);
+              setdukeMusic(true);
             }}
             disabled={!(move && currentMove === "")}
             buttonDes={`button-43`}
@@ -648,10 +701,10 @@ const Playerview = (props) => {
                 string = string.slice(0, string.indexOf("from"));
               }
               // const stringRef = string.slice(string.indexOf("from") + 4);
-              console.log(`currentMove`);
-              console.log(currentMove);
-              console.log(`string`);
-              console.log(string);
+              // console.log(`currentMove`);
+              // console.log(currentMove);
+              // console.log(`string`);
+              // console.log(string);
               // console.log(currentMove.includes(`swap`));
               // console.log(move && currentMove.includes(`swap`));
               swapCard(string);
@@ -671,9 +724,8 @@ const Playerview = (props) => {
       <div className={`box`}>
         {/* <Card /> */}
         <div>
-        <div>   Lives: {life}  </div>
-          <div> {player} </div>
-         
+          <div>   Lives: {life}  </div>
+          <div> {player} </div> 
           <div>  Coins: {coins}  </div> 
        
           {/* Cards: {cards} <br /> */}
@@ -689,6 +741,8 @@ const Playerview = (props) => {
             const deadCard = player1
               ? p1XCardsG.includes(card)
               : p2XCardsG.includes(card);
+              let swapEffect = currentMove && currentMove.includes(card)
+            // if (swapEffect) setsCMusic(true)
             return (
               <div
                 className={`current-player-card ${
@@ -705,7 +759,7 @@ const Playerview = (props) => {
                       src={getImage(card)}
                       alt={``}
                       className={`${
-                        currentMove && currentMove.includes(card)
+                        swapEffect
                           ? `swap-effect`
                           : ""
                       }  ${
@@ -723,7 +777,7 @@ const Playerview = (props) => {
                           : ``
                       }
                       onClick={() => {
-                        console.log(`card ${card}`);
+                        // console.log(`card ${card}`);
                         if (!deadCard) {
                           if (currentLoseInfluence1 && move) {
                             removeCard(
@@ -731,11 +785,13 @@ const Playerview = (props) => {
                               !currentMove.includes("fromasspass")
                             );
                           }
+                          // console.log(`onclick: fromduke>? ${currentMove}`)
                           if (currentLoseInfluence2 && move) {
+                            // console.log(`${player} onclick: fromduke>? ${currentMove}`)
                             removeCard(
                               card,
-                              currentMove.includes("fromcDuke") ||
-                                currentMove.includes("fromcAss")
+                             currentMove.includes("fromcDuke") || //bug?
+                                currentMove.includes("fromcAss")  
                             );
                           }
                         }
@@ -754,22 +810,28 @@ const Playerview = (props) => {
           volume={0.3}
         />
         <Howler
+          src={loseLifeMusic}
+          playing={loseLife} 
+          onEnd={() => setloseLife(false)}
+          volume={0.5}
+        />
+        <Howler
           src={incMusic}
           playing={incomeMusic}
           onEnd={() => setincomeMusic(false)}
           volume={0.3}
         />
-        {/* <Howler
+        <Howler
           src={dukMusic}
           playing={dukeMusic}
           onEnd={() => setdukeMusic(false)}
-        /> */}
+        />
         <Howler
           src={conMusic}
-          playing={contessaMusic || loseLife}
+          playing={contessaMusic}
           onEnd={() => {
             setcontessaMusic(false);
-            setloseLife(false);
+            
           }}
           volume={0.3}
         />
@@ -777,6 +839,18 @@ const Playerview = (props) => {
           src={counMusic}
           playing={counterMusic}
           onEnd={() => setcounterMusic(false)}
+          volume={0.3}
+        />
+        <Howler
+          src={swapCardMusic}
+          playing={sCMusic}
+          onEnd={() => setsCMusic(false)}
+          volume={0.3}
+        />
+        <Howler
+          src={pass}
+          playing={passMusic}
+          onEnd={() => setpassMusic(false)}
           volume={0.3}
         />
       </div>

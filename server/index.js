@@ -92,7 +92,7 @@ io.on("connection", (socket) => {
   socket.on("startGame", (gameState) => {
     const user = getPlayer(socket.id);
     if (user)
-      io.to(user.room).emit("startGame", { ...gameState, log: "Start Game\n" });
+      io.to(user.room).emit("startGame", { ...gameState, log: "Start Game\n", hiddenLog: "Complete Logs:\n--\nStart Game\n" });
   });
 
   socket.on("updateGame", (gameState) => {

@@ -47,8 +47,9 @@ const Lobby = () => {
           {/* <button className="">Create Room</button> */}
         </Link>
       </div>
+      
       <div className="instructions">
-        <h1>Bluff and call bluffs to Victory! </h1>
+      <h1>Bluff and call bluffs to Victory! </h1>
         
         <br/>
         <h1>Instructions</h1>
@@ -65,15 +66,15 @@ const Lobby = () => {
           <br/>
           <li>Coup: Pay 7 coins, Remove an Influence from opponent <br/>(can't be countered)</li>
           <br/>
-          <li>Swap: Opponent swaps an Influence from your deck  <br/>(can't be countered)</li>
-        </ul>
+         </ul>
         <br/>
-        <h3>
+       
+      </div>
+      <h3>
           Artist: Behnam Balali, Luis Francisco, Stephanie Gustafsson, Andrew
           Higgins + 8 more <br />
           Publisher: Indie Boards & Cards, La Mame Games and many more
         </h3>
-      </div>
     </div>
   );
 };
