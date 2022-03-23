@@ -3,9 +3,9 @@
 ## install dependencies
 
 open terminal\
-...\  
+...
 npm i\
-...\  
+...
 go to client folder\
 ...\
 cd client\
@@ -15,4 +15,4 @@ npm i
 
 open terminal\
 ...\
-npm run dev\
+npm run dev

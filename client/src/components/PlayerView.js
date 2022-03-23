@@ -149,7 +149,7 @@ const Playerview = (props) => {
     let newDeck = deck;
     const swapIndex = newCards.indexOf(card); //index ng tatanggalin na card
     const cardStr = card.slice(0, -1); //card string
-    let newLog = `${log}${terP}Put ${formatCard(cardStr)} in the deck\n`;
+    let newLog = `${terP}Put ${formatCard(cardStr)} in the deck\n${log}`;
     let newHLog = `${hiddenLog}${terP}Put ${formatCard(cardStr)} (${card}) in the deck\n`;
     //delete card from hand
     delete newCards[swapIndex];
@@ -158,7 +158,7 @@ const Playerview = (props) => {
     newHLog += `Deck: [${newDeck}]\n`;
     // shuffle deck
     newDeck = shuffle(newDeck);
-    newLog += `Deck Shuffled.\n`; 
+    newLog = `Deck Shuffled.\n` + newLog; 
     newHLog += `Deck Shuffled.\n`; 
 
     newHLog += `Deck: [${newDeck}]\n`;
@@ -166,7 +166,7 @@ const Playerview = (props) => {
     const newCard = newDeck.pop();
     newCards[swapIndex] = newCard;
 
-    newLog += `${terP}Given a card from the deck.\n`;
+    newLog = `${terP}Given a card from the deck.\n` + newLog;
     newHLog += `${terP}Given a ${formatCard(newCard.slice(0, -1))} (${newCard}) from the deck.\n`;
       
 
@@ -216,7 +216,7 @@ const Playerview = (props) => {
     let newXCards = player1 ? p1XCardsG : p2XCardsG;
     // puts card in current players graveyard
     newXCards.push(card);
-    let newLog = `${log}${terP}Lost an Influence. Card: ${formatCard(card.slice(0, -1))}\n`; 
+    let newLog = `${terP}Lost an Influence. Card: ${formatCard(card.slice(0, -1))}\n${log}`; 
     let newHLog = `${hiddenLog}${terP}Lost an Influence. Card: ${formatCard(card.slice(0, -1))}\n`;
     let p1Cards,
       p1Coins,
@@ -275,28 +275,28 @@ const Playerview = (props) => {
       // Move
       case "income":
         newCoins += 1;
-        newLog += `--\n${terP}Income\n`;
+        newLog = `${terP}Income\n--\n` + newLog;
         newHLog += `--\n${terP}Income\n`;
         break;
       case "foreignAid":
         newCurrentMove = `foreignAid`;
-        newLog += `--\n${terP}Foreign Aid\n`;
+        newLog = `${terP}Foreign Aid\n--\n` + newLog;
         newHLog += `--\n${terP}Foreign Aid\n`;
         break;
       case "duke":
         newCurrentMove = `duke`;
-        newLog += `--\n${terP}I have a Duke\n`;
+        newLog = `${terP}I have a Duke\n--\n` + newLog;
         newHLog += `--\n${terP}I have a Duke\n`;
         break;
       case "ass":
         newCurrentMove = `ass`;
-        newLog += `--\n${terP}Assassinate Influence\n`;
+        newLog = `${terP}Assassinate Influence\n--\n` + newLog;
         newHLog += `--\n${terP}Assassinate Influence\n`;
         newCoins -= 3;
         break;
       case "coup":
         newCoins -= 7;
-        newLog += `--\n${terP}Coup\n`;
+        newLog = `${terP}Coup\n--\n` + newLog;
         newHLog += `--\n${terP}Coup\n`;
         const lifeRes = removeLife(1, "");
         newOppLife = lifeRes.life;
@@ -304,17 +304,17 @@ const Playerview = (props) => {
         break;
       // Counter/Response
       case "pass":
-        newLog += `${terP}Ok\n`;
+        newLog = `${terP}Ok\n` + newLog;
         newHLog += `${terP}Ok\n`;
         if (currentMove === "foreignAid") {
           newOppCoins += 2;
-          newLog +=`${terPR}Gained 2 coins\n`
+          newLog =`${terPR}Gained 2 coins\n` + newLog
           newHLog +=`${terPR}Gained 2 coins\n`
           revTurn = true;
         }
         if (currentMove === "duke") {
           newOppCoins += 3;
-          newLog +=`${terPR}Gained 3 coins\n`
+          newLog =`${terPR}Gained 3 coins\n` + newLog
           newHLog +=`${terPR}Gained 3 coins\n`
           revTurn = true;
         }
@@ -330,11 +330,11 @@ const Playerview = (props) => {
         break;
       case "cForeignAid":
         newCurrentMove = `cForeignAid`;
-        newLog += `${terP}I have a duke, counter Foreign Aid\n`;
+        newLog = `${terP}I have a duke, counter Foreign Aid\n` + newLog;
         newHLog += `${terP}I have a duke, counter Foreign Aid\n`;
         break;
       case "cDuke":
-        newLog += `${terP}You don't have a duke\n`;
+        newLog = `${terP}You don't have a duke\n` + newLog;
         newHLog += `${terP}You don't have a duke\n`;
         const dukeMove = currentMove === "duke" ? "duke" : "";
         // check if opponnent has duke
@@ -342,14 +342,14 @@ const Playerview = (props) => {
         // console.log("currentMove", currentMove);
         if (influenceDuke.exists) {
           setsCMusic(true)
-          newLog += `${terPR}has a Duke.\n${terP}lost a life\n`;
+          newLog = `${terP}lost a life\n${terPR}has a Duke.\n` + newLog;
           newHLog += `${terPR}has a Duke.\n${terP}lost a life\n`;
           const lifeRes = removeLife(1, "current");
           newLife = lifeRes.life;
           newCurrentMove = `${lifeRes.str}swap${influenceDuke.card}`;
           if (dukeMove) {
             newOppCoins += 3;
-            newLog +=`${terPR}Gained 3 coins\n`
+            newLog =`${terPR}Gained 3 coins\n` + newLog
             newHLog +=`${terPR}Gained 3 coins\n`
             newCurrentMove += `fromduke`;
           }
@@ -358,13 +358,13 @@ const Playerview = (props) => {
           // swapCard();
           if (newCurrentMove.includes("loseInfluence1")) revTurn = true;
         } else {
-          newLog += `${terPR}has no Duke.\n${terPR}lost a life\n`;
+          newLog = `${terPR}lost a life\n${terPR}has no Duke.\n` + newLog;
           newHLog += `${terPR}has no Duke.\n${terPR}lost a life\n`; 
           if (dukeMove) 
             revTurn = true; 
           else {
             newCoins += 2;
-            newLog += `${terP}Gain 2 coins\n`;
+            newLog = `${terP}Gain 2 coins\n` + newLog;
             newHLog += `${terP}Gain 2 coins\n`;
           } 
           const lifeRes = removeLife(1, "");
@@ -379,13 +379,13 @@ const Playerview = (props) => {
         }
         break;
       case "cAss":
-        newLog += `${terP}You don't have an assassin\n`;
+        newLog = `${terP}You don't have an assassin\n` + newLog;
         newHLog += `${terP}You don't have an assassin\n`;
         // newCurrentMove = `cAss`;
         const influenceAss = checkInfluence("ass");
         if (influenceAss.exists) {
           setsCMusic(true)
-          newLog += `${terPR}has an Assassin.\n${terP}lost 2 lives\n`;
+          newLog = `${terP}lost 2 lives\n${terPR}has an Assassin.\n` + newLog;
           newHLog += `${terPR}has an Assassin.\n${terP}lost 2 lives\n`;
           const lifeRes = removeLife(2, "current");
           newLife = lifeRes.life;
@@ -412,19 +412,19 @@ const Playerview = (props) => {
 
         break;
       case "con":
-        newLog += `${terP}I have a Contessa\n`;
+        newLog = `${terP}I have a Contessa\n` + newLog;
         newHLog += `${terP}I have a Contessa\n`;
         newCurrentMove = "con";
         break;
 
       case "cCon":
-        newLog += `${terP}You don't have a Contessa\n`;
+        newLog = `${terP}You don't have a Contessa\n` + newLog;
         newHLog += `${terP}You don't have a Contessa\n`;
         // newCurrentMove = "cCon";
         const influenceCon = checkInfluence("con");
         if (influenceCon.exists) {
           setsCMusic(true)
-          newLog += `${terPR}has a Contessa\n${terP}lost a life\n`;
+          newLog = `${terP}lost a life\n${terPR}has a Contessa\n` + newLog;
           newHLog += `${terPR}has a Contessa\n${terP}lost a life\n`;
           const lifeRes = removeLife(1, "current");
           newLife = lifeRes.life;
@@ -432,7 +432,7 @@ const Playerview = (props) => {
           setswapCardStyle(influenceCon.card);
           if (newCurrentMove.includes("loseInfluence1")) revTurn = true;
         } else {
-          newLog += `${terPR}has no Contessa\n${terPR}lost 2 lives\n`;
+          newLog = `${terPR}lost 2 lives\n${terPR}has no Contessa\n` + newLog;
           newHLog += `${terPR}has no Contessa\n${terPR}lost 2 lives\n`;
           const lifeRes = removeLife(2, "");
           newOppLife = lifeRes.life;
